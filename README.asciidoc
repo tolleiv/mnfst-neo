@@ -1,0 +1,12 @@
+
+# MnfsT -
+
+image:https://travis-ci.org/tolleiv/mnfst-neo.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/mnfst-neo"]
+
+This tool will soon provide some way to get an impact score for file changes in Puppet repositories. It will eventually not even be Puppet related. We'll see.
+
+For now it's just a proof of concept.
+
+## License
+
+This is free and unencumbered software released into the public domain. See the UNLICENSE file or http://unlicense.org/ for more details.
