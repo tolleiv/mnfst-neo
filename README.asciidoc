@@ -7,6 +7,20 @@ This tool will soon provide some way to get an impact score for file changes in 
 
 For now it's just a proof of concept.
 
+
+## Usage
+
+
+     # Import the files which are contained in the servers catalog:
+     curl -X PUT -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/server/server.example.org
+
+     # Cleanup all relations of a server
+     curl -X DELETE http://localhost:3000/server/server.example.org/
+
+     #Get the score for a server
+     curl -X GET -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files/score
+
+
 ## License
 
 This is free and unencumbered software released into the public domain. See the UNLICENSE file or http://unlicense.org/ for more details.
