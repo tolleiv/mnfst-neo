@@ -1,6 +1,17 @@
 language: node_js
-services:
-  - neo4j
+
+jdk:
+    - oraclejdk7
+
+env:
+    - NEO4J_VERSION="2.1.5"
+
+before_install:
+    # install Neo4j locally:
+    - wget dist.neo4j.org/neo4j-community-$NEO4J_VERSION-unix.tar.gz
+    - tar -xzf neo4j-community-$NEO4J_VERSION-unix.tar.gz
+    - neo4j-community-$NEO4J_VERSION/bin/neo4j start
+
 node_js:
   - "0.12"
   - "0.11"
