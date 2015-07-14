@@ -29,6 +29,21 @@ For now it's just a proof of concept.
      # Remove a list of files
      curl -X DELETE -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files
 
+## Data formats
+
+### Content-type: text/plain
+
+The filelist should just be a plaintext list of server names / fqdns delimited by newlines (\n).
+
+     server1.example.org
+     server2.example.org
+
+### Content-type: application/json
+
+The filelist should just be an array of server names / fqdns.
+
+    ['server1.example.org','server2.example.org']
+
 
 ## License
 
