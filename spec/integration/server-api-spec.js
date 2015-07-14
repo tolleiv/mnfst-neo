@@ -22,6 +22,20 @@ describe('the server API', function () {
             ],
             done);
     });
+    it('can associate files for a server with json', function (done) {
+        async.series([
+                function (cb) {
+                    request(app)
+                        .put('/server/system5.localdom')
+                        .set('Content-Type', 'application/json')
+                        .send(['module/apache/manifest/apache.pp','manifest/system1.pp'])
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('Server', 1),
+                helper.assertNodeCount('File', 2)
+            ],
+            done);
+    });
 
     it('can set the scoring weight for a server', function (done) {
         async.series([

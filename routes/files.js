@@ -4,7 +4,8 @@ var async = require('async');
 var fileGraph = require('../lib/file.js');
 
 router.get('/score', function (req, res, next) {
-    var files = req.body.split('\n');
+    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
+
     fileGraph.scoreForFiles(files, function (err, result) {
         if (err) {
             res.sendStatus(500)

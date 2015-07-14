@@ -39,11 +39,19 @@ describe('the file API', function () {
                         .send("module/apache/manifest/apache.pp\nmanifest/base.pp")
                         .expect(/^5$/)
                         .expect(200, cb);
+                },
+                function (cb) {
+                    request(app)
+                        .get('/files/score')
+                        .set('Content-Type', 'application/json')
+                        .send(['module/apache/manifest/apache.pp', 'manifest/system3.pp'])
+                        .expect(/^4$/)
+                        .expect(200, cb);
                 }
             ],
             done);
     });
-    it('can calculate a weighted score for multiple files', function (done) {
+    it('can calculate a weighted score for multiple files (text or json)', function (done) {
         async.series([
                 helper.importServerFixture(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),

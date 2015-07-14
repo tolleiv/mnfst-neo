@@ -8,7 +8,8 @@ router.get('/:fqdn', function (req, res, next) {
 });
 
 router.put('/:fqdn', function (req, res, next) {
-    var files = req.body.split('\n');
+    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
+
     async.eachSeries(files, function iterator(item, callback) {
         serverGraph.linkServerToFile({fqdn: req.params.fqdn, path: item}, function (err) {
             callback(err);
