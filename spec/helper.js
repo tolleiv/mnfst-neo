@@ -1,4 +1,16 @@
 var neo4j = require('../lib/neo4j').neo4j;
+var assert = require('assert');
+var request = require('supertest');
+
+exports.importServerFixture = function (app, fqdn, files) {
+    return function (cb) {
+        request(app)
+            .put('/server/' + fqdn)
+            .set('Content-Type', 'text/plain')
+            .send(files.join('\n'))
+            .expect(200, cb);
+    }
+};
 
 exports.purgeAll = function (cb) {
     var cypher = 'MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r';
@@ -9,25 +21,28 @@ exports.assertNodeCount = function (type, count, callback) {
     var cypher = 'MATCH (n:' + type + ') RETURN n';
     neo4j.query(cypher)
         .then(function (result) {
-            var r = result.data.length;
-            if (r != count) {
-                throw new Error('Expected ' + count + ' nodes of type ' + type + ': but got ' + r)
-            } else {
-                callback(null, result.data);
-            }
+            assert.equal(result.data.length, count);
+            callback(null, result.data);
         })
         .catch(callback);
 };
+
+exports.assertServerProperty = function (fqdn, field, value, callback) {
+    var cypher = 'MATCH (s:Server) WHERE s.fqdn = {fqdn} RETURN s';
+    neo4j.query(cypher, {fqdn: fqdn})
+        .then(function (result) {
+            assert.equal(result.data[0][0].data[field], value);
+            callback(null);
+        })
+        .catch(callback);
+};
+
 exports.assertServerScore = function (fqdn, score, callback) {
     var cypher = 'MATCH (s:Server)-[r:USES]-() WHERE s.fqdn = {fqdn} RETURN COUNT(r) ';
     neo4j.query(cypher, {fqdn: fqdn})
         .then(function (result) {
-            var r = result.data[0][0];
-            if (r != score) {
-                throw new Error('Expected score ' + score + ' for server node ' + fqdn + ': but got ' + r)
-            } else {
-                callback(null);
-            }
+            assert.equal(result.data[0][0], score);
+            callback(null);
         })
         .catch(callback);
 };

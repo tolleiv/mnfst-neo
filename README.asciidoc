@@ -20,6 +20,9 @@ For now it's just a proof of concept.
      #Get the score for a server
      curl -X GET -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files/score
 
+     #Set the weight of a server
+     curl -X POST -H 'Content-Type:application/json' -d "{weight:10}" http://localhost:3000/server/server.example.org
+
 
 ## License
 

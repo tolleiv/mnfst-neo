@@ -25,7 +25,22 @@ describe('the server API', function () {
                 }
             ],
             done);
+    });
 
+    it('can set the scoring weight for a server', function (done) {
+        async.series([
+                function (cb) {
+                    request(app)
+                        .post('/server/system1.localdom')
+                        .set('Content-Type', 'application/json')
+                        .send({weight: 5})
+                        .expect(200, cb);
+                },
+                function (cb) {
+                    helper.assertServerProperty('system1.localdom', 'weight', 5, cb)
+                }
+            ],
+            done);
     });
 
     it('reuses existing objects for server and files', function (done) {
@@ -70,7 +85,6 @@ describe('the server API', function () {
                 function (cb) {
                     helper.assertServerScore('system3.localdom', 2, cb)
                 },
-
                 function (cb) {
                     request(app)
                         .delete('/server/system3.localdom/files')
