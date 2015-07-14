@@ -17,12 +17,8 @@ describe('the server API', function () {
                         .send("module/apache/manifest/apache.pp\nmanifest/system1.pp")
                         .expect(200, cb);
                 },
-                function (cb) {
-                    helper.assertNodeCount('Server', 1, cb)
-                },
-                function (cb) {
-                    helper.assertNodeCount('File', 2, cb)
-                }
+                helper.assertNodeCount('Server', 1),
+                helper.assertNodeCount('File', 2)
             ],
             done);
     });
@@ -36,69 +32,37 @@ describe('the server API', function () {
                         .send({weight: 5})
                         .expect(200, cb);
                 },
-                function (cb) {
-                    helper.assertServerProperty('system1.localdom', 'weight', 5, cb)
-                }
+                helper.assertServerProperty('system1.localdom', 'weight', 5)
             ],
             done);
     });
 
     it('reuses existing objects for server and files', function (done) {
         async.series([
-                function (cb) {
-                    request(app)
-                        .put('/server/system2.localdom')
-                        .set('Content-Type', 'text/plain')
-                        .send("module/apache/manifest/apache.pp\nmanifest/system2a.pp")
-                        .expect(200, cb);
-                },
-
-                function (cb) {
-                    request(app)
-                        .put('/server/system2.localdom')
-                        .set('Content-Type', 'text/plain')
-                        .send("module/apache/manifest/apache.pp\nmanifest/system2b.pp")
-                        .expect(200, cb);
-                },
-                function (cb) {
-                    helper.assertNodeCount('Server', 1, cb)
-                },
-                function (cb) {
-                    helper.assertNodeCount('File', 3, cb)
-                },
-                function (cb) {
-                    helper.assertServerScore('system2.localdom', 3, cb)
-                }
+                helper.importServerFixture(app, 'system2.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/system2a.pp']),
+                helper.importServerFixture(app, 'system2.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/system2b.pp']),
+                helper.assertNodeCount('Server', 1),
+                helper.assertNodeCount('File', 3),
+                helper.assertServerScore('system2.localdom', 3)
             ],
             done);
     });
 
     it('can purge files <> server relations', function (done) {
         async.series([
-                function (cb) {
-                    request(app)
-                        .put('/server/system3.localdom')
-                        .set('Content-Type', 'text/plain')
-                        .send("module/apache/manifest/apache.pp\nmanifest/system3.pp")
-                        .expect(200, cb);
-                },
-                function (cb) {
-                    helper.assertServerScore('system3.localdom', 2, cb)
-                },
+                helper.importServerFixture(app, 'system3.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
+                helper.assertServerScore('system3.localdom', 2),
                 function (cb) {
                     request(app)
                         .delete('/server/system3.localdom/files')
                         .expect(200, cb);
                 },
-                function (cb) {
-                    helper.assertNodeCount('Server', 1, cb)
-                },
-                function (cb) {
-                    helper.assertNodeCount('File', 2, cb)
-                },
-                function (cb) {
-                    helper.assertServerScore('system3.localdom', 0, cb)
-                }
+                helper.assertNodeCount('Server', 1),
+                helper.assertNodeCount('File', 2),
+                helper.assertServerScore('system3.localdom', 0)
             ],
             done);
     });

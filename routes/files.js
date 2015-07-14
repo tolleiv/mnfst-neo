@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
 var async = require('async');
 var fileGraph = require('../lib/file.js');
 
-router.get('/score', bodyParser.text(), function (req, res, next) {
+router.get('/score', function (req, res, next) {
     var files = req.body.split('\n');
     fileGraph.scoreForFiles(files, function (err, result) {
         if (err) {
