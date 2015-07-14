@@ -77,4 +77,21 @@ describe('the file API', function () {
             ],
             done);
     });
+
+    it('can purge files', function(done) {
+        async.series([
+                helper.importServerFixture(app, 'some.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/some.pp']),
+                helper.assertNodeCount('File', 2),
+                function (cb) {
+                    request(app)
+                        .delete('/files')
+                        .set('Content-Type', 'application/json')
+                        .send(['manifest/some.pp'])
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('File', 1)
+            ],
+            done);
+    });
 });

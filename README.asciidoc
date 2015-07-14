@@ -14,14 +14,20 @@ For now it's just a proof of concept.
      # Import the files which are contained in the servers catalog:
      curl -X PUT -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/server/server.example.org
 
-     # Cleanup all relations of a server
-     curl -X DELETE http://localhost:3000/server/server.example.org/
-
-     #Get the score for a server
+     # Get the score for a server
      curl -X GET -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files/score
 
-     #Set the weight of a server
+     # Set the weight of a server
      curl -X POST -H 'Content-Type:application/json' -d "{weight:10}" http://localhost:3000/server/server.example.org
+
+     # Cleanup all file relations of a server
+     curl -X DELETE http://localhost:3000/server/server.example.org/files
+
+     # Remove a server
+     curl -X DELETE http://localhost:3000/server/server.example.org
+
+     # Remove a list of files
+     curl -X DELETE -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files
 
 
 ## License

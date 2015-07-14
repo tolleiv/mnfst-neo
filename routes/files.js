@@ -15,4 +15,11 @@ router.get('/score', function (req, res, next) {
     });
 });
 
+router.delete('/', function (req, res, next) {
+    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
+    fileGraph.deleteFiles(files, function (err, result) {
+        res.sendStatus(err == null ? 200 : 500)
+    });
+});
+
 module.exports = router;

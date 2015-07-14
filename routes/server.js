@@ -33,4 +33,10 @@ router.delete('/:fqdn/files', function (req, res, next) {
     });
 });
 
+router.delete('/:fqdn', function (req, res, next) {
+    serverGraph.deleteServer({fqdn: req.params.fqdn}, function (err) {
+        res.sendStatus(err == null ? 200 : 500)
+    });
+});
+
 module.exports = router;

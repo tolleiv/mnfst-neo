@@ -81,4 +81,19 @@ describe('the server API', function () {
             done);
     });
 
+    it('can purge servers', function(done) {
+        async.series([
+                helper.importServerFixture(app, 'system3.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
+                helper.assertNodeCount('Server', 1),
+                function (cb) {
+                    request(app)
+                        .delete('/server/system3.localdom')
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('Server', 0)
+            ],
+            done);
+    });
+
 });
