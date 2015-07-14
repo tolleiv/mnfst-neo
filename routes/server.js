@@ -2,15 +2,14 @@ var express = require('express');
 var router = express.Router();
 var async = require('async');
 var serverGraph = require('../lib/server.js');
+var file_param = require('../lib/middleware/file_param');
 
 router.get('/:fqdn', function (req, res, next) {
     res.sendStatus(200)
 });
 
-router.put('/:fqdn', function (req, res, next) {
-    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
-
-    async.eachSeries(files, function iterator(item, callback) {
+router.put('/:fqdn', file_param, function (req, res, next) {
+    async.eachSeries(req.params.files, function iterator(item, callback) {
         serverGraph.linkServerToFile({fqdn: req.params.fqdn, path: item}, function (err) {
             callback(err);
         });

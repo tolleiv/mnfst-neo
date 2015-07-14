@@ -1,12 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var async = require('async');
 var fileGraph = require('../lib/file.js');
+var file_param = require('../lib/middleware/file_param');
 
-router.get('/score', function (req, res, next) {
-    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
-
-    fileGraph.scoreForFiles(files, function (err, result) {
+router.get('/score', file_param, function (req, res, next) {
+    fileGraph.scoreForFiles(req.params.files, function (err, result) {
         if (err) {
             res.sendStatus(500)
         } else {
@@ -15,9 +13,8 @@ router.get('/score', function (req, res, next) {
     });
 });
 
-router.delete('/', function (req, res, next) {
-    var files = Array.isArray(req.body) ? req.body : req.body.split('\n');
-    fileGraph.deleteFiles(files, function (err, result) {
+router.delete('/', file_param, function (req, res, next) {
+    fileGraph.deleteFiles(req.params.files, function (err, result) {
         res.sendStatus(err == null ? 200 : 500)
     });
 });
