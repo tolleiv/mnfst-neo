@@ -10,12 +10,11 @@ For now it's just a proof of concept.
 
 ## Usage
 
-
      # Import the files which are contained in the servers catalog:
-     curl -X PUT -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/server/server.example.org
+     curl -X PUT -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/server/server.example.org
 
      # Get the score for a server
-     curl -X GET -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files/score
+     curl -X GET -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/files/score
 
      # Set the weight of a server
      curl -X POST -H 'Content-Type:application/json' -d "{weight:10}" http://localhost:3000/server/server.example.org
@@ -27,7 +26,7 @@ For now it's just a proof of concept.
      curl -X DELETE http://localhost:3000/server/server.example.org
 
      # Remove a list of files
-     curl -X DELETE -H 'Content-Type:text/plain' -d "@./filelist.txt" http://localhost:3000/files
+     curl -X DELETE -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/files
 
 ## Data formats
 
