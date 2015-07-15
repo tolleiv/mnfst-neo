@@ -13,6 +13,12 @@ router.get('/score', file_param, function (req, res, next) {
     });
 });
 
+router.get('/', function(req, res, next) {
+    fileGraph.scoreByFile(function(err, result) {
+        res.json(result)
+    })
+});
+
 router.delete('/', file_param, function (req, res, next) {
     fileGraph.deleteFiles(req.params.files, function (err, result) {
         res.sendStatus(err == null ? 200 : 500)

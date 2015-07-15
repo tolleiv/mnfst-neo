@@ -18,9 +18,12 @@ For now it's just a proof of concept.
      curl -X PUT -H 'Content-Type:application/json' \
          --data-binary "@./filelist.json" http://localhost:3000/server/server.example.org
 
-     # Get the score for a server
+     # Get the score summed up for a list of files
      curl -X GET -H 'Content-Type:text/plain' \
          --data-binary "@./filelist.txt" http://localhost:3000/files/score
+
+     # Get the score per file
+     curl -X GET http://localhost:3000/files
 
      # Set the weight of a server
      curl -X POST -H 'Content-Type:application/json' \
