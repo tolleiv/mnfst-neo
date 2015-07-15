@@ -11,37 +11,62 @@ For now it's just a proof of concept.
 ## Usage
 
      # Import the files which are contained in the servers catalog:
-     curl -X PUT -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/server/server.example.org
+     curl -X PUT -H 'Content-Type:text/plain' \
+         --data-binary "@./filelist.txt" http://localhost:3000/server/server.example.org
+
+     # Import the files and resources from the servers catalog:
+     curl -X PUT -H 'Content-Type:application/json' \
+         --data-binary "@./filelist.json" http://localhost:3000/server/server.example.org
 
      # Get the score for a server
-     curl -X GET -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/files/score
+     curl -X GET -H 'Content-Type:text/plain' \
+         --data-binary "@./filelist.txt" http://localhost:3000/files/score
 
      # Set the weight of a server
-     curl -X POST -H 'Content-Type:application/json' -d "{weight:10}" http://localhost:3000/server/server.example.org
+     curl -X POST -H 'Content-Type:application/json' \
+         -d "{weight:10}" http://localhost:3000/server/server.example.org
 
      # Cleanup all file relations of a server
      curl -X DELETE http://localhost:3000/server/server.example.org/files
+
+     # Update the weights after an agent run:
+     curl -X POST
 
      # Remove a server
      curl -X DELETE http://localhost:3000/server/server.example.org
 
      # Remove a list of files
-     curl -X DELETE -H 'Content-Type:text/plain' --data-binary "@./filelist.txt" http://localhost:3000/files
+     curl -X DELETE -H 'Content-Type:text/plain' \
+         --data-binary "@./filelist.txt" http://localhost:3000/files
 
 ## Data formats
 
 ### Content-type: text/plain
 
-The filelist should just be a plaintext list of server names / fqdns delimited by newlines (\n).
+The filelist should just be a plaintext list file names delimited by newlines (\n).
 
-     server1.example.org
-     server2.example.org
+     module/apache/manifests/init.pp
+     module/apache/manifests/host.pp
+
+
+The extended file+resource list should be separated by a tab character as delimiter
+
+     module/apache/manifests/init.pp     Service[apache2]
+     module/apache/manifests/host.pp     File[a-vhost.conf]
+
 
 ### Content-type: application/json
 
-The filelist should just be an array of server names / fqdns.
+The filelist should just be an array of file names:
 
-    ['server1.example.org','server2.example.org']
+    ['module/apache/manifests/init.pp','module/apache/manifests/host.pp']
+
+The extended file+resource list should be an array of objects each with the file name and resource information:
+
+    [
+     {file: 'manifests/init.pp', resource: 'Service[apache]' },
+     {file: 'manifests/host.pp', resource: 'File[a-vhost.conf]' }
+    ]
 
 
 ## License
