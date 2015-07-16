@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var async = require('async');
 var serverGraph = require('../lib/server.js');
-var file_param = require('../lib/middleware/file_param');
+var file_param = require('../lib/middleware/file_param').middleware;
 
 router.get('/:fqdn', function (req, res, next) {
     res.sendStatus(200)

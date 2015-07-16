@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fileGraph = require('../lib/file.js');
-var file_param = require('../lib/middleware/file_param');
+var file_param = require('../lib/middleware/file_param').middleware;
 
 router.get('/score', file_param, function (req, res, next) {
     fileGraph.scoreForFiles(req.params.files, function (err, result) {
@@ -13,8 +13,8 @@ router.get('/score', file_param, function (req, res, next) {
     });
 });
 
-router.get('/', function(req, res, next) {
-    fileGraph.scoreByFile(function(err, result) {
+router.get('/', function (req, res, next) {
+    fileGraph.scoreByFile(function (err, result) {
         res.json(result)
     })
 });

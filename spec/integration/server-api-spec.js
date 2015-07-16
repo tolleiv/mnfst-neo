@@ -118,4 +118,20 @@ describe('the server API', function () {
             done);
     });
 
+    xit('can associate files and resources for a server', function (done) {
+        async.series([
+                function (cb) {
+                    request(app)
+                        .put('/server/system8.localdom')
+                        .set('Content-Type', 'text/plain')
+                        .send("module/apache/manifest/apache.pp\tService[apache2]\nmanifest/system1.pp\tExec[do]")
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('Server', 1),
+                helper.assertNodeCount('File', 2),
+                helper.assertNodeCount('Resource', 2)
+            ],
+            done);
+    });
+
 });
