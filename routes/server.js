@@ -10,7 +10,7 @@ router.get('/:fqdn', function (req, res, next) {
 
 router.put('/:fqdn', file_param, function (req, res, next) {
     async.eachSeries(req.params.files, function iterator(item, callback) {
-        serverGraph.linkServerToFile({fqdn: req.params.fqdn, path: item}, function (err) {
+        serverGraph.linkServerToFile({fqdn: req.params.fqdn, path: item.file}, function (err) {
             callback(err);
         });
     }, function (err) {
