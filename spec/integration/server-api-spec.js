@@ -37,27 +37,6 @@ describe('the server API', function () {
             ],
             done);
     });
-    it('will skip files with empty name', function (done) {
-        async.series([
-                function (cb) {
-                    request(app)
-                        .put('/server/system6.localdom')
-                        .set('Content-Type', 'application/json')
-                        .send(['module/apache/manifest/apache.pp',''])
-                        .expect(200, cb);
-                },
-                function (cb) {
-                    request(app)
-                        .put('/server/system6.localdom')
-                        .set('Content-Type', 'text/plain')
-                        .send("module/apache/manifest/apache.pp\n")
-                        .expect(200, cb);
-                },
-                helper.assertNodeCount('Server', 1),
-                helper.assertNodeCount('File', 1)
-            ],
-            done);
-    });
 
     it('can set the scoring weight for a server', function (done) {
         async.series([
