@@ -10,9 +10,8 @@ router.get('/:fqdn', function (req, res, next) {
 
 router.put('/:fqdn', file_param, function (req, res, next) {
     async.eachSeries(req.params.files, function iterator(item, callback) {
-        serverGraph.linkServerToFile({fqdn: req.params.fqdn, path: item.file}, function (err) {
-            callback(err);
-        });
+        var p = {fqdn: req.params.fqdn, path: item.file, resource: item.resource || null}
+        serverGraph.linkServerToFile(p, callback);
     }, function (err) {
         res.sendStatus(err == null ? 200 : 500)
     });

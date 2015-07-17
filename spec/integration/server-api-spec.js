@@ -29,7 +29,7 @@ describe('the server API', function () {
                     request(app)
                         .put('/server/system5.localdom')
                         .set('Content-Type', 'application/json')
-                        .send(['module/apache/manifest/apache.pp','manifest/system1.pp'])
+                        .send(['module/apache/manifest/apache.pp', 'manifest/system1.pp'])
                         .expect(200, cb);
                 },
                 helper.assertNodeCount('Server', 1),
@@ -82,7 +82,7 @@ describe('the server API', function () {
             done);
     });
 
-    it('can purge servers', function(done) {
+    it('can purge servers', function (done) {
         async.series([
                 helper.importServerFixture(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
@@ -97,12 +97,12 @@ describe('the server API', function () {
             done);
     });
 
-    xit('can associate files and resources for a server', function (done) {
+    it('can associate files and resources for a server', function (done) {
         async.series([
                 function (cb) {
                     request(app)
                         .put('/server/system8.localdom')
-                        .set('Content-Type', 'text/plain')
+                        .set('Content-Type', 'text/csv')
                         .send("module/apache/manifest/apache.pp\tService[apache2]\nmanifest/system1.pp\tExec[do]")
                         .expect(200, cb);
                 },
