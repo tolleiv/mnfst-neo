@@ -51,8 +51,9 @@ The filelist should just be a plaintext list file names delimited by newlines (\
      module/apache/manifests/init.pp
      module/apache/manifests/host.pp
 
+### Content-type: text/csv
 
-The extended file+resource list should be separated by a tab character as delimiter
+The extended file+resource list should be separated by a tab character as the default delimiter
 
      module/apache/manifests/init.pp     Service[apache2]
      module/apache/manifests/host.pp     File[a-vhost.conf]
