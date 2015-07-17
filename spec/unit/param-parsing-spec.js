@@ -16,44 +16,48 @@ describe('the parameter parsing', function () {
         expect(parser(request, response).value()).toEqual(expected);
     }
 
-    it('transforms a simple file list to an array', function (done) {
+    it('transforms a simple file list to an array', function () {
         assertParserResult(
             "file1\nfile2\nfile3",
             [{file: 'file1'}, {file: 'file2'}, {file: 'file3'}]
         );
-        done();
     });
 
-    it('does not transform passed in arrays', function (done) {
+    it('does not transform passed in arrays', function () {
         assertParserResult(
             ['file4', 'file5'],
             [{file: 'file4'}, {file: 'file5'}]
         );
-        done();
     });
 
-    it('filters out empty values in text arguments', function (done) {
+    it('filters out empty values in text arguments', function () {
         assertParserResult(
             "file7\n\nfile8\n",
             [{file: 'file7'}, {file: 'file8'}]
         );
-        done();
     });
 
-    it('filters out empty values in array arguments', function (done) {
+    it('filters out empty values in array arguments', function () {
         assertParserResult(
             ['file9', '', 'file10', ''],
             [{file: 'file9'}, {file: 'file10'}]
         );
-        done();
     });
 
-    it('transforms the extended file list to an array', function (done) {
+    it('transforms the extended file list to an array', function () {
         assertParserResult(
             'text/csv',
             "file1\tService[apache2]\nfile2\tExec[run]",
             [{file: 'file1', resource: 'Service[apache2]'}, {file: 'file2', resource: 'Exec[run]'}]
         );
-        done();
     });
+
+    it('does not perform any transformations if the json uses the extended format', function() {
+        var data=[{file: 'file9', resource: 'Service[apache2]'}, {file: 'file12', resource: 'Exec[run]'}]
+        assertParserResult(
+            data,
+            data
+        );
+    })
+
 });
