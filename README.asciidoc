@@ -32,8 +32,10 @@ For now it's just a proof of concept.
      # Cleanup all file relations of a server
      curl -X DELETE http://localhost:3000/server/server.example.org/files
 
-     # Update the weights after an agent run:
-     curl -X POST
+     # Update the change rate values for resources after an agent run:
+     curl -X POST -H 'Content-Type:application/json' \
+         -d "{changes:['Exec[do]','Service[apache]'], errors:0]}" \
+          http://localhost:3000/server/server.example.org/resources
 
      # Remove a server
      curl -X DELETE http://localhost:3000/server/server.example.org

@@ -17,6 +17,11 @@ router.put('/:fqdn', file_param, function (req, res, next) {
     });
 });
 
+router.post('/:fqdn/rates', function (req, res, next) {
+    res.sendStatus(200)
+});
+
+
 router.post('/:fqdn', function (req, res, next) {
     serverGraph.updateServerProperties(
         {fqdn: req.params.fqdn, weight: req.body.weight},

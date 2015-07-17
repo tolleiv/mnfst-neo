@@ -113,4 +113,29 @@ describe('the server API', function () {
             done);
     });
 
-});
+    describe('rate updates after agent runs', function () {
+        it('can adjust rate values', function (done) {
+            var s = 'system10.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s,
+                        ["apache.pp\tService[apache2]", "system3.pp\tExec[do]"]),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
+                    function (cb) {
+                        request(app)
+                            .post('/server/' + s + '/rates')
+                            .set('Content-Type', 'application/json')
+                            .send({changes: ['Exec[do]'], errors: 0})
+                            .expect(200, cb);
+                    },
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0.1),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0)
+                ],
+                done
+            )
+            ;
+        });
+    });
+
+})
+;

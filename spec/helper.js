@@ -16,6 +16,15 @@ exports.importServerFixture = function (app, fqdn, files) {
             .expect(200, cb);
     }
 };
+exports.importServerResourceFixtures = function (app, fqdn, files) {
+    return function (cb) {
+        request(app)
+            .put('/server/' + fqdn)
+            .set('Content-Type', 'text/csv')
+            .send(files.join('\n'))
+            .expect(200, cb);
+    }
+};
 
 exports.assertNodeCount = function (type, count) {
     return function (cb) {
@@ -47,6 +56,18 @@ exports.assertServerScore = function (fqdn, score) {
         neo4j.query(cypher, {fqdn: fqdn})
             .then(function (result) {
                 assert.equal(result.data[0][0], score);
+                cb(null);
+            })
+            .catch(cb);
+    }
+};
+
+exports.assertRelationProperty = function (fqdn, resource, field, value) {
+    return function (cb) {
+        var cypher = 'MATCH (s:Server)<-[r:CHANGES]-(rr:Resource) WHERE s.fqdn = {fqdn} AND rr.name = {resource} RETURN r';
+        neo4j.query(cypher, {fqdn: fqdn, resource: resource})
+            .then(function (result) {
+                assert.equal(result.data[0][0].data[field], value);
                 cb(null);
             })
             .catch(cb);
