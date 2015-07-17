@@ -128,7 +128,7 @@ describe('the server API', function () {
                             .send({changes: ['Exec[do]'], errors: 0})
                             .expect(200, cb);
                     },
-                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0.1),
+                    // helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0.1),
                     helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0)
                 ],
                 done
