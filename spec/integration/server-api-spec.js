@@ -3,6 +3,7 @@ var Bluebird = require('bluebird');
 var request = require('supertest');
 var async = require('async');
 var helper = require('../helper');
+var lessThan = helper.lessThan;
 
 describe('the server API', function () {
 
@@ -121,15 +122,27 @@ describe('the server API', function () {
                         ["apache.pp\tService[apache2]", "system3.pp\tExec[do]"]),
                     helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
                     helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
-                    function (cb) {
-                        request(app)
-                            .post('/server/' + s + '/rates')
-                            .set('Content-Type', 'application/json')
-                            .send({changes: ['Exec[do]'], errors: 0})
-                            .expect(200, cb);
-                    },
-                    // helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0.1),
+                    helper.triggerServerResourcePing(app, s, {changes: ['Exec[do]'], errors: 0}),
+                    helper.triggerServerResourcePing(app, s, {changes: ['Exec[do]'], errors: 0}),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', lessThan(0.2)),
                     helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0)
+                ],
+                done
+            )
+            ;
+        });
+        it('unchanged resources will adjust all values to zero automatically', function (done) {
+            var s = 'system10.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s,
+                        ["apache.pp\tService[apache2]", "system3.pp\tExec[do]"]),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
+                    helper.triggerServerResourcePing(app, s, {changes: ['Exec[do]'], errors: 0}),
+                    helper.triggerServerResourcePing(app, s, {changes: ['Service[apache2]'], errors: 0}),
+                    helper.triggerServerResourcePing(app, s, {changes: [], errors: 0}),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', lessThan(0.085)),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', lessThan(0.095))
                 ],
                 done
             )

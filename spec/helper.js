@@ -67,9 +67,30 @@ exports.assertRelationProperty = function (fqdn, resource, field, value) {
         var cypher = 'MATCH (s:Server)<-[r:CHANGES]-(rr:Resource) WHERE s.fqdn = {fqdn} AND rr.name = {resource} RETURN r';
         neo4j.query(cypher, {fqdn: fqdn, resource: resource})
             .then(function (result) {
-                assert.equal(result.data[0][0].data[field], value);
+
+                if (typeof value == 'function') {
+                    assert(value(result.data[0][0].data[field]))
+                } else {
+                    assert.equal(result.data[0][0].data[field], value);
+                }
                 cb(null);
             })
             .catch(cb);
     }
 };
+
+exports.triggerServerResourcePing = function (app, fqdn, data) {
+    return function (cb) {
+        request(app)
+            .post('/server/' + fqdn + '/rates')
+            .set('Content-Type', 'application/json')
+            .send(data)
+            .expect(200, cb);
+    };
+};
+
+exports.lessThan = function (a) {
+    return function (b) {
+        return b < a
+    }
+}

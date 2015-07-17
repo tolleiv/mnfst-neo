@@ -18,9 +18,10 @@ router.put('/:fqdn', file_param, function (req, res, next) {
 });
 
 router.post('/:fqdn/rates', function (req, res, next) {
-    res.sendStatus(200)
+    serverGraph.updateServerResourceRate({fqdn: req.params.fqdn, changes: req.body.changes}, function (err) {
+        res.sendStatus(err == null ? 200 : 500)
+    });
 });
-
 
 router.post('/:fqdn', function (req, res, next) {
     serverGraph.updateServerProperties(
