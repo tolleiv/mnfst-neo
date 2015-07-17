@@ -7,7 +7,7 @@ exports.purgeAll = function (cb) {
     neo4j.query(cypher).then(cb.bind(null, null))
 };
 
-exports.importServerFixture = function (app, fqdn, files) {
+exports.importServerFileFixtures = function (app, fqdn, files) {
     return function (cb) {
         request(app)
             .put('/server/' + fqdn)

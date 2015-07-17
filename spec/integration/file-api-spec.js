@@ -9,9 +9,9 @@ describe('the file API', function () {
 
     it('can calculate a basic score for a single file', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system1.localdom',
+                helper.importServerFileFixtures(app, 'system1.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system1.pp']),
-                helper.importServerFixture(app, 'system2.localdom',
+                helper.importServerFileFixtures(app, 'system2.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system2.pp']),
                 function (cb) {
                     request(app)
@@ -26,11 +26,11 @@ describe('the file API', function () {
     });
     it('can calculate a basic score for multiple files', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system3.localdom',
+                helper.importServerFileFixtures(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
-                helper.importServerFixture(app, 'system4.localdom',
+                helper.importServerFileFixtures(app, 'system4.localdom',
                     ['manifest/system4.pp', 'module/apache/manifest/apache.pp', 'manifest/base.pp']),
-                helper.importServerFixture(app, 'system5.localdom',
+                helper.importServerFileFixtures(app, 'system5.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/base.pp']),
                 function (cb) {
                     request(app)
@@ -53,11 +53,11 @@ describe('the file API', function () {
     });
     it('can calculate a weighted score for multiple files (text or json)', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system3.localdom',
+                helper.importServerFileFixtures(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
-                helper.importServerFixture(app, 'system4.localdom',
+                helper.importServerFileFixtures(app, 'system4.localdom',
                     ['manifest/system4.pp', 'module/apache/manifest/apache.pp', 'manifest/base.pp']),
-                helper.importServerFixture(app, 'system5.localdom',
+                helper.importServerFileFixtures(app, 'system5.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/base.pp']),
                 function (cb) {
                     request(app)
@@ -80,7 +80,7 @@ describe('the file API', function () {
 
     it('can purge files', function(done) {
         async.series([
-                helper.importServerFixture(app, 'some.localdom',
+                helper.importServerFileFixtures(app, 'some.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/some.pp']),
                 helper.assertNodeCount('File', 2),
                 function (cb) {

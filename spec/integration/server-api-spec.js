@@ -54,9 +54,9 @@ describe('the server API', function () {
 
     it('reuses existing objects for server and files', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system2.localdom',
+                helper.importServerFileFixtures(app, 'system2.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system2a.pp']),
-                helper.importServerFixture(app, 'system2.localdom',
+                helper.importServerFileFixtures(app, 'system2.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system2b.pp']),
                 helper.assertNodeCount('Server', 1),
                 helper.assertNodeCount('File', 3),
@@ -67,7 +67,7 @@ describe('the server API', function () {
 
     it('can purge files <> server relations', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system3.localdom',
+                helper.importServerFileFixtures(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
                 helper.assertServerScore('system3.localdom', 2),
                 function (cb) {
@@ -84,7 +84,7 @@ describe('the server API', function () {
 
     it('can purge servers', function (done) {
         async.series([
-                helper.importServerFixture(app, 'system3.localdom',
+                helper.importServerFileFixtures(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
                 helper.assertNodeCount('Server', 1),
                 function (cb) {
