@@ -1,0 +1,32 @@
+extends layout
+
+block content
+
+    .row
+        .col-md-4
+            .container
+                .row
+                    .col-md-4
+                        .panel.panel-default
+                            .panel-heading File score distribution
+                            .panel-body
+                                #fileScoreHisto
+
+                .row
+                    .col-md-4
+                        .panel.panel-default
+                            .panel-heading Entity counts
+                            .panel-body
+                                #countsChart
+
+        .col-md-6
+            .panel.panel-default
+                table.table.table-striped
+                    tr
+                        th Files
+                        th Influence score
+
+                    each file in influencialFiles
+                        tr
+                            td= file.name
+                            td= file.score

@@ -1,0 +1,31 @@
+extends layout
+
+block content
+
+    .row
+        .col-md-6
+            .panel.panel-default
+                .panel-heading Resource distribution
+                .panel-body
+                    #resourceActivityChart
+
+        .col-md-4
+            .container
+                .row
+                    .col-md-4
+                        .panel.panel-default
+                            table.table.table-striped
+                                tr
+                                    th Resource
+                                    th Activity rate
+
+                                each res in activeResources
+                                    tr
+                                        td= res.name
+                                        td= res.score
+                .row
+                    .col-md-4
+                        .panel.panel-default
+                            .panel-heading Entity counts
+                            .panel-body
+                                #countsChart

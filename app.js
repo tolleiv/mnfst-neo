@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes_idx = require('./routes/index');
 var routes_srv = require('./routes/server');
 var routes_fls = require('./routes/files');
+var routes_rsc = require('./routes/resources');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/server', routes_srv);
 app.use('/files', routes_fls);
+app.use('/resources', routes_rsc)
 app.use('/', routes_idx);
 
 // catch 404 and forward to error handler

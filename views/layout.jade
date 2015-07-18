@@ -1,7 +1,37 @@
 doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+html(lang="en")
+    include inc/header
+    body
+
+        nav.navbar.navbar-default.navbar-fixed-top
+            .container
+                .navbar-header
+                    a.navbar-brand(href='#') Mnfst impact
+                #navbar.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li
+                            a(href="/ui/dashboards/files") Files
+                        li
+                            a(href="/ui/dashboards/resources") Resources
+
+        .container(role='main')
+            block content
+
+            .row
+                p
+                    | Built on OpenSource:&nbsp;
+                    a(href="http://neo4j.org") Neo4J
+                    | ,&nbsp;
+                    a(href="http://expressjs.com") ExpressJS
+                    | ,&nbsp;
+                    a(href="https://github.com/haio/neo4j-io") neo4j-io
+                    | ,&nbsp;
+                    a(href="http://getbootstrap.com/") Bootstrap
+                    | ,&nbsp;
+                    a(href="http://bootswatch.com") Bootswatch
+                    | ,&nbsp;
+                    a(href="http://d3js.org/") D3
+                    | ,&nbsp;
+                    a(href="http://dimplejs.org/") Dimple
+        include inc/scripts
+        block script
