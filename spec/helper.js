@@ -1,6 +1,7 @@
 var neo4j = require('../lib/neo4j').neo4j;
 var assert = require('assert');
 var request = require('supertest');
+var async = require('async');
 
 exports.purgeAll = function (cb) {
     var cypher = 'MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r';
@@ -79,18 +80,22 @@ exports.assertRelationProperty = function (fqdn, resource, field, value) {
     }
 };
 
-exports.triggerServerResourcePing = function (app, fqdn, data) {
+exports.triggerServerResourcePing = function (app, fqdn, data, cnt) {
     return function (cb) {
-        request(app)
-            .post('/server/' + fqdn + '/rates')
-            .set('Content-Type', 'application/json')
-            .send(data)
-            .expect(200, cb);
+        async.times(cnt || 1, function (n, next) {
+            request(app)
+                .post('/server/' + fqdn + '/rates')
+                .set('Content-Type', 'application/json')
+                .send(data)
+                .expect(200, next);
+        }, cb)
+
     };
 };
 
-exports.lessThan = function (a) {
+exports.between = function (a, c) {
     return function (b) {
-        return b < a
+        console.log('a: ' + a + ' b:' + b + ' c:' + c)
+        return b > a && b < c
     }
 }

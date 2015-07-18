@@ -34,7 +34,7 @@ For now it's just a proof of concept.
 
      # Update the change rate values for resources after an agent run:
      curl -X POST -H 'Content-Type:application/json' \
-         -d "{changes:['Exec[do]','Service[apache]'], errors:0]}" \
+         -d "{changes:['Exec[do]','Service[apache]']]}" \
           http://localhost:3000/server/server.example.org/resources
 
      # Remove a server
