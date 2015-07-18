@@ -145,6 +145,28 @@ describe('the server API', function () {
             )
             ;
         });
+        it('change rates are not shared between servers', function (done) {
+            var s1 = 'system11.localdom';
+            var s2 = 'system12.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s1,
+                        ["apache.pp\tService[apache2]", "system1.pp\tExec[do]"]),
+                    helper.importServerResourceFixtures(app, s2,
+                        ["apache.pp\tService[apache2]", "system2.pp\tExec[do]"]),
+                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0),
+                    helper.triggerServerResourcePing(app, s1, {changes: ['Service[apache2]', 'Exec[do]']}, 50),
+                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', between(0.9, 1)),
+                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', between(0.9, 1)),
+                    helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0)
+                ],
+                done
+            )
+            ;
+        });
     });
 
 })
