@@ -23,7 +23,7 @@ describe('the parameter parsing', function () {
         );
     });
 
-    it('does not transform passed in arrays', function () {
+    it('transforms passed in arrays', function () {
         assertParserResult(
             ['file4', 'file5'],
             [{file: 'file4'}, {file: 'file5'}]
@@ -51,13 +51,27 @@ describe('the parameter parsing', function () {
             [{file: 'file1', resource: 'Service[apache2]'}, {file: 'file2', resource: 'Exec[run]'}]
         );
     });
+    it('filters out entries with empty file value from the extended file list', function () {
+        assertParserResult(
+            'text/csv',
+            "file1\tService[apache2]\n\tExec[run]",
+            [{file: 'file1', resource: 'Service[apache2]'}]
+        );
+    });
 
-    it('does not perform any transformations if the json uses the extended format', function() {
-        var data=[{file: 'file9', resource: 'Service[apache2]'}, {file: 'file12', resource: 'Exec[run]'}]
+    it('passes along json in the extended format', function () {
+        var data = [{file: 'file9', resource: 'Service[apache2]'}, {file: 'file12', resource: 'Exec[run]'}]
         assertParserResult(
             data,
             data
         );
-    })
+    });
+
+    it('filters out empty file values in the json extended format', function () {
+        assertParserResult(
+            [{file: 'file9', resource: 'Service[apache2]'}, {file: '', resource: 'Exec[run]'}],
+            [{file: 'file9', resource: 'Service[apache2]'}]
+        );
+    });
 
 });
