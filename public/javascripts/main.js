@@ -21,16 +21,15 @@ $(function () {
                 counts[data[i][1]] = counts[data[i][1]] + 1 || 1;
                 max = Math.max(data[i][1], max);
             }
-
             var bucket = 1;
-            while(bucket*7 < max) bucket *= 2;
+            while (bucket * 7 < max) bucket *= 2;
             var chartData = [];
-            for(var b=0;b<7;b++) {
-                var cnt=0;
-                for (var j = bucket*b; j <= bucket*(b+1); j++) {
+            for (var b = 0; b < 7; b++) {
+                var cnt = 0;
+                for (var j = bucket * b; j <= bucket * (b + 1); j++) {
                     cnt += counts[j] || 0
                 }
-                chartData.push({Score: j-1, Amount: cnt})
+                chartData.push({Score: j - 1, Amount: cnt})
             }
 
             var fileScoreChart = new dimple.chart(fileScoreSvg, chartData);
@@ -47,18 +46,23 @@ $(function () {
     if (document.getElementById("resourceActivityChart")) {
         var svg = dimple.newSvg("#resourceActivityChart", 450, 300);
         d3.json("/resources", function (data) {
-            var chartData=[];
+            var chartData = [];
             for (var i = 0; i < data.length; i++) {
-                var t=data[i][0].split('[')[0]
-                chartData.push({Name: data[i][0], Amount: data[i][1],Rate: data[i][2], Type:t})
+                if (Math.round(data[i][2] * 1000) / 1000 > 0) {
+                    var t = data[i][0].split('[')[0] || 'Unknown';
+                    chartData.push({Name: data[i][0], Amount: data[i][1], Rate: data[i][2], Type: t})
+                }
             }
-            console.log(chartData)
             var myChart = new dimple.chart(svg, chartData);
-            myChart.setBounds(50, 30, 370, 230)
-            myChart.addMeasureAxis("x", "Amount");
-            myChart.addMeasureAxis("y", "Rate");
-            myChart.addSeries("Type", dimple.plot.bubble);
+            myChart.setBounds(50, 30, 370, 230);
+//            myChart.addColorAxis("Type", ["#DA9694", "#FABF8F", "#C4D79B"]);
+            var x = myChart.addMeasureAxis("x", "Amount");
+            x.title = "Effected systems";
+            var y = myChart.addMeasureAxis("y", "Rate");
+            y.title = "Change rate";
+            var series1 = myChart.addSeries(["Name", "Type"], dimple.plot.bubble);
             myChart.addLegend(10, 10, 360, 20, "right");
+            //var series1 = myChart.addSeries("Type", dimple.plot.bubble);
             myChart.draw();
         });
     }
