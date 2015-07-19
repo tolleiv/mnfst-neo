@@ -151,18 +151,20 @@ describe('the server API', function () {
             var s2 = 'system12.localdom';
             async.series([
                     helper.importServerResourceFixtures(app, s1,
-                        ["apache.pp\tService[apache2]", "system1.pp\tExec[do]"]),
+                        ["apache.pp\tExec[d0]", "system1.pp\tExec[do1t]"]),
                     helper.importServerResourceFixtures(app, s2,
-                        ["apache.pp\tService[apache2]", "system2.pp\tExec[do]"]),
-                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', 0),
-                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', 0),
-                    helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
-                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0),
-                    helper.triggerServerResourcePing(app, s1, {changes: ['Service[apache2]', 'Exec[do]']}, 50),
-                    helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
-                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0),
-                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', between(0.9, 1)),
-                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', between(0.9, 1))
+                        ["apache.pp\tExec[d0]", "system2.pp\tExec[do1t]"]),
+                    helper.assertRelationProperty(s1, 'Exec[do1t]', 'rate10', 0),
+                    helper.assertRelationProperty(s1, 'Exec[d0]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Exec[do1t]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Exec[d0]', 'rate10', 0),
+                    //helper.triggerServerResourcePing(app, s1, {changes: ['Exec[d0]', 'Exec[do1t]']}, 50),
+                    helper.triggerServerResourceChangePing(app, s1, "Exec[d0]\nExec[do1t]", 50),
+                    helper.assertRelationProperty(s2, 'Exec[do1t]', 'rate10', 0),
+                    helper.assertRelationProperty(s2, 'Exec[d0]', 'rate10', 0),
+                    helper.assertRelationProperty(s1, 'Exec[do1t]', 'rate10', between(0.1, 1)),
+                    helper.assertRelationProperty(s1, 'Exec[d0]', 'rate10', between(0.1, 1))
+
                 ],
                 done
             )

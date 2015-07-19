@@ -64,15 +64,16 @@ exports.assertServerScore = function (fqdn, score) {
 };
 
 exports.assertRelationProperty = function (fqdn, resource, field, value) {
+    var arg = arguments;
     return function (cb) {
         var cypher = 'MATCH (s:Server)<-[r:CHANGES]-(rr:Resource) WHERE s.fqdn = {fqdn} AND rr.name = {resource} RETURN r';
         neo4j.query(cypher, {fqdn: fqdn, resource: resource})
             .then(function (result) {
-
+                var fieldValue = result.data[0][0].data[field];
                 if (typeof value == 'function') {
-                    assert(value(result.data[0][0].data[field]))
+                    assert(value(fieldValue), JSON.stringify(arg) + '=' + fieldValue)
                 } else {
-                    assert.equal(result.data[0][0].data[field], value);
+                    assert.equal(fieldValue, value, JSON.stringify(arg) + '=' + fieldValue);
                 }
                 cb(null);
             })

@@ -19,7 +19,8 @@ router.put('/:fqdn', file_param, function (req, res, next) {
 
 router.post('/:fqdn/rates/changes', function (req, res, next) {
     var resources = req.body.split('\n');
-    serverGraph.updateServerResourceRate({fqdn: req.params.fqdn, changes: resources}, function (err) {
+    var p = {fqdn: req.params.fqdn, changes: resources};
+    serverGraph.updateServerResourceRate(p, function (err) {
         res.status(err == null ? 200 : 500).send(err || 'OK')
     });
 });
