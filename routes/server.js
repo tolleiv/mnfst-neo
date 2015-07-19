@@ -52,7 +52,6 @@ router.delete('/:fqdn', function (req, res, next) {
 
 router.get('/', function (req, res, next) {
     serverGraph.list(function (err, results) {
-        console.log(results)
         res.json(results)
     });
 

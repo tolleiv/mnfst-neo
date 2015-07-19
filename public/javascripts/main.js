@@ -53,17 +53,38 @@ $(function () {
                     chartData.push({Name: data[i][0], Amount: data[i][1], Rate: data[i][2], Type: t})
                 }
             }
-            var myChart = new dimple.chart(svg, chartData);
-            myChart.setBounds(50, 30, 370, 230);
-//            myChart.addColorAxis("Type", ["#DA9694", "#FABF8F", "#C4D79B"]);
-            var x = myChart.addMeasureAxis("x", "Amount");
+            var resourceActivityChart = new dimple.chart(svg, chartData);
+            resourceActivityChart.setBounds(50, 30, 370, 230);
+            var x = resourceActivityChart.addMeasureAxis("x", "Amount");
             x.title = "Effected systems";
-            var y = myChart.addMeasureAxis("y", "Rate");
+            var y = resourceActivityChart.addMeasureAxis("y", "Rate");
             y.title = "Change rate";
-            var series1 = myChart.addSeries(["Name", "Type"], dimple.plot.bubble);
-            myChart.addLegend(10, 10, 360, 20, "right");
-            //var series1 = myChart.addSeries("Type", dimple.plot.bubble);
-            myChart.draw();
+            var series1 = resourceActivityChart.addSeries(["Name", "Type"], dimple.plot.bubble);
+            resourceActivityChart.addLegend(10, 10, 360, 20, "right");
+            resourceActivityChart.draw();
+        });
+    }
+    if (document.getElementById("serverActivityChart")) {
+        var svg = dimple.newSvg("#serverActivityChart", 450, 300);
+        d3.json("/server", function (results) {
+            var chartData = [];
+            for (var i = 0; i < results.data.length; i++) {
+                chartData.push({
+                    Server: results.data[i][0].data.fqdn,
+                    Weight: results.data[i][0].data.weight || 1,
+                    Files: results.data[i][1],
+                    Resources: results.data[i][2],
+                    Rate: Math.round(results.data[i][3] * 1000) / 1000
+                });
+            }
+
+            var serverActivityChart = new dimple.chart(svg, chartData);
+            serverActivityChart.setBounds(50, 30, 370, 230);
+            var x = serverActivityChart.addMeasureAxis("x", "Files");
+            var y = serverActivityChart.addMeasureAxis("y", "Rate");
+            var series1 = serverActivityChart.addSeries(["Server", "Weight"], dimple.plot.bubble);
+            // serverActivityChart.addLegend(10, 10, 360, 20, "right");
+            serverActivityChart.draw();
         });
     }
 });
