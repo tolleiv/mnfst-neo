@@ -2,6 +2,7 @@ var app = require('../../app');
 var request = require('supertest');
 var async = require('async');
 var helper = require('../helper');
+var between = require('../helper').between;
 
 describe('the server API', function () {
 

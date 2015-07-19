@@ -107,7 +107,7 @@ exports.triggerServerResourceChangePing = function (app, fqdn, data, cnt) {
 
 exports.between = function (a, c) {
     return function (b) {
-        console.log('a: ' + a + ' b:' + b + ' c:' + c)
+        console.log('a: ' + a + ' b:' + b + ' c:' + c + ' >> ' + (b > a && b < c))
         return b > a && b < c
     }
 }
