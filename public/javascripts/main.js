@@ -3,8 +3,9 @@ $(function () {
         var countsSvg = dimple.newSvg("#countsChart", 330, 150);
         d3.json('/data/node-types.json', function (data) {
             var labelCountGraph = new dimple.chart(countsSvg, data);
-            labelCountGraph.setBounds(60, 20, 260, 100);
+            labelCountGraph.setBounds(60, 20, 260, 90);
             var x = labelCountGraph.addMeasureAxis("x", "value");
+            x.title = 'Amount'
             labelCountGraph.addCategoryAxis("y", "label");
             labelCountGraph.addSeries('label', dimple.plot.bar);
             labelCountGraph.draw();
@@ -46,7 +47,7 @@ $(function () {
             }
             console.log(chartData)
             var myChart = new dimple.chart(svg, chartData);
-            myChart.setBounds(30, 30, 370, 230)
+            myChart.setBounds(50, 30, 370, 230)
             myChart.addMeasureAxis("x", "Amount");
             myChart.addMeasureAxis("y", "Rate");
             myChart.addSeries("Type", dimple.plot.bubble);

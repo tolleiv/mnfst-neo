@@ -1,5 +1,8 @@
 body {
     padding-top: 70px;
     padding-bottom: 30px;
-    xxbackground-color: #eee;
+}
+
+body > .container {
+    padding-bottom: 50px;
 }

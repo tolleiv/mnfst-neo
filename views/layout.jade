@@ -13,13 +13,15 @@ html(lang="en")
                             a(href="/ui/dashboards/files") Files
                         li
                             a(href="/ui/dashboards/resources") Resources
-
+                        li
+                            a(href="/ui/dashboards/servers") Servers
         .container(role='main')
             block content
 
+        .container
             .row
                 p
-                    | Built on OpenSource:&nbsp;
+                    | Built with OpenSource:&nbsp;
                     a(href="http://neo4j.org") Neo4J
                     | ,&nbsp;
                     a(href="http://expressjs.com") ExpressJS
@@ -33,5 +35,8 @@ html(lang="en")
                     a(href="http://d3js.org/") D3
                     | ,&nbsp;
                     a(href="http://dimplejs.org/") Dimple
+                p
+                    | Available on&nbsp;
+                    a(href="https://github.com/tolleiv/mnfst-neo") Github
         include inc/scripts
         block script
