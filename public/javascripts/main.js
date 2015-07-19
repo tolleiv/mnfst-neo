@@ -1,9 +1,9 @@
 $(function () {
     if (document.getElementById("countsChart")) {
-        var countsSvg = dimple.newSvg("#countsChart", 330, 150);
+        var countsSvg = dimple.newSvg("#countsChart", 520, 150);
         d3.json('/data/node-types.json', function (data) {
             var labelCountGraph = new dimple.chart(countsSvg, data);
-            labelCountGraph.setBounds(60, 20, 260, 90);
+            labelCountGraph.setBounds(60, 20, 470, 90);
             var x = labelCountGraph.addMeasureAxis("x", "value");
             x.title = 'Amount'
             labelCountGraph.addCategoryAxis("y", "label");
@@ -13,7 +13,7 @@ $(function () {
     }
 
     if (document.getElementById("fileScoreHisto")) {
-        var fileScoreSvg = dimple.newSvg("#fileScoreHisto", 330, 160);
+        var fileScoreSvg = dimple.newSvg("#fileScoreHisto", 520, 160);
         d3.json("/files", function (data) {
             var counts = {};
             var max = 0;
@@ -21,13 +21,12 @@ $(function () {
                 counts[data[i][1]] = counts[data[i][1]] + 1 || 1;
                 max = Math.max(data[i][1], max);
             }
-            console.log(counts)
             var chartData = [];
             for (var j = 0; j <= max; j++) {
                 chartData.push({Score: j, Amount: counts[j] || 0})
             }
             var fileScoreChart = new dimple.chart(fileScoreSvg, chartData);
-            fileScoreChart.setBounds(40, 5, 280, 100);
+            fileScoreChart.setBounds(60, 5, 470, 100);
             var x = fileScoreChart.addCategoryAxis("x", "Score");
             fileScoreChart.addMeasureAxis("y", "Amount");
             var s = fileScoreChart.addSeries(null, dimple.plot.area);

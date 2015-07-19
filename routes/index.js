@@ -15,7 +15,9 @@ router.get('/ui/dashboards/files', function (req, res, next) {
     async.series([
         function (cb) {
             fileGraph.scoreByFile(function (err, results) {
-                if (err) { throw err; }
+                if (err) {
+                    throw err;
+                }
                 var data = [];
                 for (var i = 0; i < Math.min(15, results.length); i++) {
                     data.push({name: results[i][0], score: results[i][1]})
@@ -31,7 +33,9 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
     async.series([
         function (cb) {
             resourceGraph.scoreForResources(function (err, results) {
-                if (err) { throw err; }
+                if (err) {
+                    throw err;
+                }
                 var data = [];
                 for (var i = 0; i < Math.min(10, results.length); i++) {
                     data.push({name: results[i][0], score: Math.round(results[i][2] * 1000) / 1000})
@@ -47,16 +51,17 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
     async.series([
         function (cb) {
             serverGraph.list(function (err, results) {
-                if (err) { throw err; }
+                if (err) {
+                    throw err;
+                }
                 var data = [];
                 for (var i = 0; i < results.data.length; i++) {
-                    console.log(results.data[i])
                     data.push({
                         fqdn: results.data[i][0].data.fqdn,
                         weight: results.data[i][0].data.weight || 1,
-                        rate: Math.round(results.data[i][1] * 1000) / 1000,
+                        files: results.data[i][1],
                         resources: results.data[i][2],
-                        files: results.data[i][3]
+                        rate: Math.round(results.data[i][3] * 1000) / 1000
                     });
                 }
                 cb(err, data);
@@ -69,7 +74,9 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
 
 router.get('/data/node-types.json', function (req, res) {
     statsGraph.nodeCounts(function (err, results) {
-        if (err) { throw err; }
+        if (err) {
+            throw err;
+        }
         var data = [];
         for (var i = 0; i < results.length; i++) {
             data.push({label: results[i][1].join(), value: results[i][0], color: colors[i]})
