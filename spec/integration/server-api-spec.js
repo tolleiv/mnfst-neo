@@ -167,6 +167,23 @@ describe('the server API', function () {
             )
             ;
         });
+
+        it('can adjust change rate values seperately', function (done) {
+            var s = 'system13.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s,
+                        ["apache.pp\tService[apache2]", "system13.pp\tExec[do]", "system13.pp\tExec[foo]"]),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
+                    helper.triggerServerResourceChangePing(app, s, "Exec[do]\nExec[foo]", 50),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', between(0.9, 1)),
+                    helper.assertRelationProperty(s, 'Exec[foo]', 'rate10', between(0.9, 1)),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0)
+                ],
+                done
+            )
+            ;
+        });
     });
 
 })

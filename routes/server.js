@@ -17,6 +17,13 @@ router.put('/:fqdn', file_param, function (req, res, next) {
     });
 });
 
+router.post('/:fqdn/rates/changes', function (req, res, next) {
+    var resources = req.body.split('\n');
+    serverGraph.updateServerResourceRate({fqdn: req.params.fqdn, changes: resources}, function (err) {
+        res.send(err == null ? 200 : 500,err)
+    });
+});
+
 router.post('/:fqdn/rates', function (req, res, next) {
     serverGraph.updateServerResourceRate({fqdn: req.params.fqdn, changes: req.body.changes}, function (err) {
         res.sendStatus(err == null ? 200 : 500)

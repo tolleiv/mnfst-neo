@@ -92,6 +92,18 @@ exports.triggerServerResourcePing = function (app, fqdn, data, cnt) {
 
     };
 };
+exports.triggerServerResourceChangePing = function (app, fqdn, data, cnt) {
+    return function (cb) {
+        async.times(cnt || 1, function (n, next) {
+            request(app)
+                .post('/server/' + fqdn + '/rates/changes')
+                .set('Content-Type', 'text/csv')
+                .send(data)
+                .expect(200, next);
+        }, cb)
+
+    };
+};
 
 exports.between = function (a, c) {
     return function (b) {
