@@ -159,10 +159,10 @@ describe('the server API', function () {
                     helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
                     helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0),
                     helper.triggerServerResourcePing(app, s1, {changes: ['Service[apache2]', 'Exec[do]']}, 50),
-                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', between(0.9, 1)),
-                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', between(0.9, 1)),
                     helper.assertRelationProperty(s2, 'Exec[do]', 'rate10', 0),
-                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0)
+                    helper.assertRelationProperty(s2, 'Service[apache2]', 'rate10', 0),
+                    helper.assertRelationProperty(s1, 'Exec[do]', 'rate10', between(0.9, 1)),
+                    helper.assertRelationProperty(s1, 'Service[apache2]', 'rate10', between(0.9, 1))
                 ],
                 done
             )
