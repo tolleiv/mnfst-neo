@@ -21,10 +21,18 @@ $(function () {
                 counts[data[i][1]] = counts[data[i][1]] + 1 || 1;
                 max = Math.max(data[i][1], max);
             }
+
+            var bucket = 1;
+            while(bucket*7 < max) bucket *= 2;
             var chartData = [];
-            for (var j = 0; j <= max; j++) {
-                chartData.push({Score: j, Amount: counts[j] || 0})
+            for(var b=0;b<7;b++) {
+                var cnt=0;
+                for (var j = bucket*b; j <= bucket*(b+1); j++) {
+                    cnt += counts[j] || 0
+                }
+                chartData.push({Score: j-1, Amount: cnt})
             }
+
             var fileScoreChart = new dimple.chart(fileScoreSvg, chartData);
             fileScoreChart.setBounds(60, 5, 470, 100);
             var x = fileScoreChart.addCategoryAxis("x", "Score");
