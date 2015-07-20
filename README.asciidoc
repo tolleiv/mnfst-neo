@@ -1,12 +1,34 @@
 
-# MnfsT -
+# MnfsT impact
 
 image:https://travis-ci.org/tolleiv/mnfst-neo.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/mnfst-neo"]
 
-This tool will soon provide some way to get an impact score for file changes in Puppet repositories. It will eventually not even be Puppet related. We'll see.
+Using central provisioning tools (Puppet, Chef, Ansible, SaltStack, ...) brings in the risk that one commit might break a lot of systems at once. Using convential CI tools mitigate that risk a lot but there's still the risk that a code change has a bigger impact than assumed.
 
-For now it's just a proof of concept.
+This tool is a small graph driven approach to deal with that risk and answer the following questions:
 
+ * Which systems might be effected by a code change in a certain set of files
+ * What is the overall risk /reach of a certain change
+ * Which `resources` are provisioned actually provided by
+
+It's supposed to be versatile and not tool specific. Nevertheless, it's currently just used to companion our Puppet Server and it's Puppet Dashboard. The datamodule and the interface it not Puppet specific, though.
+
+## Screenshots
+
+Along with the API documented below, the tool provides a user interface which shows some statistics. Here's a sneak peak:
+
+image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/4f72780b8e38c389ab882b55a657894cb552bc1f/activity-distribution.png["Resource activity distribution chart"]
+image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/e34c4f47175309fbb4a39309da539d7a67b6a261/file-score-distribution.png["File score distribution chart"]
+
+# Installation
+
+ 1. Install Neo4j
+ 2. Install NodeJs or IOjs and NPM
+ 2. Clone this repository
+ 3. Run `npm install`
+ 4. Run `npm start`
+ 5. Push in some data
+ 6. Check the dashboard under `http://localhost:3000`
 
 ## Usage
 
@@ -79,6 +101,15 @@ The extended file+resource list should be an array of objects each with the file
      {file: 'manifests/host.pp', resource: 'File[a-vhost.conf]' }
     ]
 
+## TODO List
+
+ * Resource Error rates should be included
+ * Resource deletion / absence handling tbd
+ * Per File / Server dashboard
+ * Puppet, Chef, Ansible integration workflow needs to be documented
+ * Metrics generation, best practices need to be documented
+ * Full demo dataset / demo instance tbd
+ * Charts should be resizeable
 
 ## License
 
