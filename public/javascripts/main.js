@@ -3,7 +3,7 @@ $(function () {
         var countsSvg = dimple.newSvg("#countsChart", 520, 150);
         d3.json('/data/node-types.json', function (data) {
             var labelCountGraph = new dimple.chart(countsSvg, data);
-            labelCountGraph.setBounds(60, 20, 470, 90);
+            labelCountGraph.setBounds(60, 20, 440, 90);
             var x = labelCountGraph.addMeasureAxis("x", "value");
             x.title = 'Amount';
             labelCountGraph.addCategoryAxis("y", "label");
@@ -34,7 +34,7 @@ $(function () {
             }
 
             var fileScoreChart = new dimple.chart(fileScoreSvg, chartData);
-            fileScoreChart.setBounds(60, 5, 470, 100);
+            fileScoreChart.setBounds(60, 15, 440, 100);
             var x = fileScoreChart.addCategoryAxis("x", "Score");
             fileScoreChart.addMeasureAxis("y", "Amount");
             var s = fileScoreChart.addSeries(null, dimple.plot.area);
@@ -45,7 +45,7 @@ $(function () {
     }
 
     if (document.getElementById("fileScoreDots")) {
-        var fileScoreDotsSvg = dimple.newSvg("#fileScoreDots", 450, 300);
+        var fileScoreDotsSvg = dimple.newSvg("#fileScoreDots", 520, 300);
         d3.json("/files", function (data) {
             var chartData=[];
             for (var i = 0; i < data.length; i++) {
@@ -53,7 +53,7 @@ $(function () {
             }
 
             var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);
-            fileScoreDotChart.setBounds(50, 30, 370, 230);
+            fileScoreDotChart.setBounds(50, 30, 450, 230);
             var x = fileScoreDotChart.addLogAxis("x", "ServerCount");
             var y = fileScoreDotChart.addLogAxis("y", "WeightScore");
             var series1 = fileScoreDotChart.addSeries("File", dimple.plot.bubble);
@@ -83,7 +83,7 @@ $(function () {
         });
     }
     if (document.getElementById("serverActivityChart")) {
-        var serverActivitySvg = dimple.newSvg("#serverActivityChart", 450, 300);
+        var serverActivitySvg = dimple.newSvg("#serverActivityChart", 520, 300);
         d3.json("/server", function (results) {
             var chartData = [];
             for (var i = 0; i < results.data.length; i++) {
@@ -92,14 +92,15 @@ $(function () {
                     Weight: results.data[i][0].data.weight || 1,
                     Files: results.data[i][1],
                     Resources: results.data[i][2],
-                    Rate: Math.round(results.data[i][3] * 1000) / 1000
+                    Rate: Math.round(results.data[i][4] * 1000) / 1000
                 });
             }
 
             var serverActivityChart = new dimple.chart(serverActivitySvg, chartData);
-            serverActivityChart.setBounds(50, 30, 370, 230);
+            serverActivityChart.setBounds(50, 30, 440, 230);
             var x = serverActivityChart.addMeasureAxis("x", "Files");
             var y = serverActivityChart.addMeasureAxis("y", "Rate");
+            y.title = "Maximum rate";
             var series1 = serverActivityChart.addSeries(["Server", "Weight"], dimple.plot.bubble);
             // serverActivityChart.addLegend(10, 10, 360, 20, "right");
             serverActivityChart.draw();

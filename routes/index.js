@@ -61,7 +61,8 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
                         weight: results.data[i][0].data.weight || 1,
                         files: results.data[i][1],
                         resources: results.data[i][2],
-                        rate: Math.round(results.data[i][3] * 1000) / 1000
+                        rate: Math.round(results.data[i][3] * 1000) / 1000,
+                        max_rate: Math.round(results.data[i][4] * 1000) / 1000
                     });
                 }
                 cb(err, data);

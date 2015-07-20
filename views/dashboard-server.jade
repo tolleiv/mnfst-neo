@@ -24,15 +24,11 @@ block content
                 table.table.table-striped
                     tr
                         th Server
-                        th Weight
-                        th Files
-                        th Resources
-                        th Changerate
+                        th Changerate (avg)
+                        th Changerate (max)
 
                     each server in servers
                         tr
                             td= server.fqdn
-                            td= server.weight
-                            td= server.files
-                            td= server.resources
                             td= server.rate
+                            td= server.max_rate
