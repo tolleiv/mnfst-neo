@@ -5,7 +5,7 @@ $(function () {
             var labelCountGraph = new dimple.chart(countsSvg, data);
             labelCountGraph.setBounds(60, 20, 470, 90);
             var x = labelCountGraph.addMeasureAxis("x", "value");
-            x.title = 'Amount'
+            x.title = 'Amount';
             labelCountGraph.addCategoryAxis("y", "label");
             labelCountGraph.addSeries('label', dimple.plot.bar);
             labelCountGraph.draw();
@@ -49,12 +49,12 @@ $(function () {
         d3.json("/files", function (data) {
             var chartData=[];
             for (var i = 0; i < data.length; i++) {
-                chartData.push({File: data[i][0],FileCount:data[i][1], WeightScore: data[i][2]})
+                chartData.push({File: data[i][0],ServerCount:data[i][1], WeightScore: data[i][2]})
             }
 
             var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);
             fileScoreDotChart.setBounds(50, 30, 370, 230);
-            var x = fileScoreDotChart.addLogAxis("x", "FileCount");
+            var x = fileScoreDotChart.addLogAxis("x", "ServerCount");
             var y = fileScoreDotChart.addLogAxis("y", "WeightScore");
             var series1 = fileScoreDotChart.addSeries("File", dimple.plot.bubble);
             fileScoreDotChart.draw();
@@ -62,7 +62,7 @@ $(function () {
     }
 
     if (document.getElementById("resourceActivityChart")) {
-        var svg = dimple.newSvg("#resourceActivityChart", 450, 300);
+        var resourceActivitySvg = dimple.newSvg("#resourceActivityChart", 450, 300);
         d3.json("/resources", function (data) {
             var chartData = [];
             for (var i = 0; i < data.length; i++) {
@@ -71,7 +71,7 @@ $(function () {
                     chartData.push({Name: data[i][0], Amount: data[i][1], Rate: data[i][2], Type: t})
                 }
             }
-            var resourceActivityChart = new dimple.chart(svg, chartData);
+            var resourceActivityChart = new dimple.chart(resourceActivitySvg, chartData);
             resourceActivityChart.setBounds(50, 30, 370, 230);
             var x = resourceActivityChart.addMeasureAxis("x", "Amount");
             x.title = "Effected systems";
@@ -83,7 +83,7 @@ $(function () {
         });
     }
     if (document.getElementById("serverActivityChart")) {
-        var svg = dimple.newSvg("#serverActivityChart", 450, 300);
+        var serverActivitySvg = dimple.newSvg("#serverActivityChart", 450, 300);
         d3.json("/server", function (results) {
             var chartData = [];
             for (var i = 0; i < results.data.length; i++) {
@@ -96,7 +96,7 @@ $(function () {
                 });
             }
 
-            var serverActivityChart = new dimple.chart(svg, chartData);
+            var serverActivityChart = new dimple.chart(serverActivitySvg, chartData);
             serverActivityChart.setBounds(50, 30, 370, 230);
             var x = serverActivityChart.addMeasureAxis("x", "Files");
             var y = serverActivityChart.addMeasureAxis("y", "Rate");
