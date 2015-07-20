@@ -17,8 +17,8 @@ It's supposed to be versatile and not tool specific. Nevertheless, it's currentl
 
 Along with the API documented below, the tool provides a user interface which shows some statistics. Here's a sneak peak:
 
-image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/4f72780b8e38c389ab882b55a657894cb552bc1f/activity-distribution.png["Resource activity distribution chart"]
-image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/e34c4f47175309fbb4a39309da539d7a67b6a261/file-score-distribution.png["File score distribution chart"]
+image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/activity-distribution.png["Resource activity distribution chart"]
+image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/file-score-distribution.png["File score distribution chart"]
 
 # Installation
 
