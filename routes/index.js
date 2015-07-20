@@ -20,7 +20,7 @@ router.get('/ui/dashboards/files', function (req, res, next) {
                 }
                 var data = [];
                 for (var i = 0; i < Math.min(15, results.length); i++) {
-                    data.push({name: results[i][0], score: results[i][1]})
+                    data.push({name: results[i][0], count: results[i][1], score: results[i][2]})
                 }
                 cb(err, data);
             })

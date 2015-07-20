@@ -27,7 +27,7 @@ For now it's just a proof of concept.
 
      # Set the weight of a server
      curl -X POST -H 'Content-Type:application/json' \
-         -d "{weight:10}" http://localhost:3000/server/server.example.org
+         -d '{"weight":10}' http://localhost:3000/server/server.example.org
 
      # Cleanup all file relations of a server
      curl -X DELETE http://localhost:3000/server/server.example.org/files

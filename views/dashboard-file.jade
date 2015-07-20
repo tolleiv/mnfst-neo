@@ -24,9 +24,11 @@ block content
                 table.table.table-striped
                     tr
                         th Files
+                        th Influenced servers
                         th Influence score
 
                     each file in influencialFiles
                         tr
                             td= file.name
+                            td= file.count
                             td= file.score
