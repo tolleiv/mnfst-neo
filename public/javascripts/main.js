@@ -62,7 +62,7 @@ $(function () {
     }
 
     if (document.getElementById("resourceActivityChart")) {
-        var resourceActivitySvg = dimple.newSvg("#resourceActivityChart", 450, 300);
+        var resourceActivitySvg = dimple.newSvg("#resourceActivityChart", 520, 300);
         d3.json("/resources", function (data) {
             var chartData = [];
             for (var i = 0; i < data.length; i++) {
@@ -78,7 +78,7 @@ $(function () {
             var y = resourceActivityChart.addMeasureAxis("y", "Rate");
             y.title = "Change rate";
             var series1 = resourceActivityChart.addSeries(["Name", "Type"], dimple.plot.bubble);
-            resourceActivityChart.addLegend(10, 10, 360, 20, "right");
+            resourceActivityChart.addLegend(440, 10, 50, 200);
             resourceActivityChart.draw();
         });
     }
