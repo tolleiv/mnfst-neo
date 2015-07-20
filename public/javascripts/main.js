@@ -13,18 +13,19 @@ $(function () {
     }
 
     if (document.getElementById("fileScoreHisto")) {
+        var bucketNumber = 13;
         var fileScoreSvg = dimple.newSvg("#fileScoreHisto", 520, 160);
         d3.json("/files", function (data) {
             var counts = {};
             var max = 0;
             for (var i = 0; i < data.length; i++) {
-                counts[data[i][1]] = counts[data[i][1]] + 1 || 1;
-                max = Math.max(data[i][1], max);
+                counts[data[i][2]] = counts[data[i][2]] + 1 || 1;
+                max = Math.max(data[i][2], max);
             }
             var bucket = 1;
-            while (bucket * 7 < max) bucket *= 2;
+            while (bucket * bucketNumber < max) bucket *= 2;
             var chartData = [];
-            for (var b = 0; b < 7; b++) {
+            for (var b = 0; b < bucketNumber; b++) {
                 var cnt = 0;
                 for (var j = bucket * b; j <= bucket * (b + 1); j++) {
                     cnt += counts[j] || 0
@@ -40,6 +41,23 @@ $(function () {
             s.interpolation = "step";
             s.lineWeight = 1;
             fileScoreChart.draw();
+        });
+    }
+
+    if (document.getElementById("fileScoreDots")) {
+        var fileScoreDotsSvg = dimple.newSvg("#fileScoreDots", 450, 300);
+        d3.json("/files", function (data) {
+            var chartData=[];
+            for (var i = 0; i < data.length; i++) {
+                chartData.push({File: data[i][0],FileCount:data[i][1], WeightScore: data[i][2]})
+            }
+
+            var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);
+            fileScoreDotChart.setBounds(50, 30, 370, 230);
+            var x = fileScoreDotChart.addLogAxis("x", "FileCount");
+            var y = fileScoreDotChart.addLogAxis("y", "WeightScore");
+            var series1 = fileScoreDotChart.addSeries("File", dimple.plot.bubble);
+            fileScoreDotChart.draw();
         });
     }
 
