@@ -3,21 +3,21 @@ var router = express.Router();
 var fileGraph = require('../lib/file.js');
 var file_param = require('../lib/middleware/file_param').middleware;
 
-router.get('/score', file_param, function (req, res, next) {
-    fileGraph.scoreForFiles(req.params.files, function (err, result) {
-        res.status(err == null ? 200 : 500).send(err || result.toString());
+router.get('/score', file_param, function (req, res) {
+    fileGraph.scoreForFiles(req.params.files).then(function (result) {
+        res.send(result.toString());
     });
 });
 
-router.get('/', function (req, res, next) {
-    fileGraph.scoreByFile(function (err, result) {
+router.get('/', function (req, res) {
+    fileGraph.scoreByFile().then(function (result) {
         res.json(result)
     })
 });
 
-router.delete('/', file_param, function (req, res, next) {
-    fileGraph.deleteFiles(req.params.files, function (err, result) {
-        res.status(err == null ? 200 : 500).send(err || 'OK');
+router.delete('/', file_param, function (req, res) {
+    fileGraph.deleteFiles(req.params.files).then(function (result) {
+        res.send('OK')
     });
 });
 

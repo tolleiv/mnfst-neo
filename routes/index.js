@@ -14,16 +14,15 @@ router.get('/', function (req, res, next) {
 router.get('/ui/dashboards/files', function (req, res, next) {
     async.series([
         function (cb) {
-            fileGraph.scoreByFile(function (err, results) {
-                if (err) {
-                    throw err;
-                }
-                var data = [];
-                for (var i = 0; i < Math.min(15, results.length); i++) {
-                    data.push({name: results[i][0], count: results[i][1], score: results[i][2]})
-                }
-                cb(err, data);
-            })
+            fileGraph.scoreByFile()
+                .then(function (results) {
+                    var data = [];
+                    for (var i = 0; i < Math.min(15, results.length); i++) {
+                        data.push({name: results[i][0], count: results[i][1], score: results[i][2]})
+                    }
+                    cb(null, data);
+                })
+                .catch(cb);
         }
     ], function (err, results) {
         res.render('dashboard-file', {title: 'Mnfst - Files dashboard', influencialFiles: results[0]});
@@ -32,16 +31,15 @@ router.get('/ui/dashboards/files', function (req, res, next) {
 router.get('/ui/dashboards/resources', function (req, res, next) {
     async.series([
         function (cb) {
-            resourceGraph.scoreForResources(function (err, results) {
-                if (err) {
-                    throw err;
-                }
-                var data = [];
-                for (var i = 0; i < Math.min(10, results.length); i++) {
-                    data.push({name: results[i][0], score: Math.round(results[i][2] * 1000) / 1000})
-                }
-                cb(err, data);
-            })
+            resourceGraph.scoreForResources()
+                .then(function (results) {
+                    var data = [];
+                    for (var i = 0; i < Math.min(10, results.length); i++) {
+                        data.push({name: results[i][0], score: Math.round(results[i][2] * 1000) / 1000})
+                    }
+                    cb(null, data);
+                })
+                .catch(cb);
         }
     ], function (err, results) {
         res.render('dashboard-resource', {title: 'Mnfst - Resource dashboard', activeResources: results[0]});
@@ -50,23 +48,22 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
 router.get('/ui/dashboards/servers', function (req, res, next) {
     async.series([
         function (cb) {
-            serverGraph.list(function (err, results) {
-                if (err) {
-                    throw err;
-                }
-                var data = [];
-                for (var i = 0; i < results.data.length; i++) {
-                    data.push({
-                        fqdn: results.data[i][0].data.fqdn,
-                        weight: results.data[i][0].data.weight || 1,
-                        files: results.data[i][1],
-                        resources: results.data[i][2],
-                        rate: Math.round(results.data[i][3] * 1000) / 1000,
-                        max_rate: Math.round(results.data[i][4] * 1000) / 1000
-                    });
-                }
-                cb(err, data);
-            });
+            serverGraph.list()
+                .then(function (results) {
+                    var data = [];
+                    for (var i = 0; i < results.data.length; i++) {
+                        data.push({
+                            fqdn: results.data[i][0].data.fqdn,
+                            weight: results.data[i][0].data.weight || 1,
+                            files: results.data[i][1],
+                            resources: results.data[i][2],
+                            rate: Math.round(results.data[i][3] * 1000) / 1000,
+                            max_rate: Math.round(results.data[i][4] * 1000) / 1000
+                        });
+                    }
+                    cb(null, data);
+                })
+                .catch(cb);
         }
     ], function (err, results) {
         res.render('dashboard-server', {title: 'Mnfst - Servers dashboard', servers: results[0]});
@@ -74,16 +71,14 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
 });
 
 router.get('/data/node-types.json', function (req, res) {
-    statsGraph.nodeCounts(function (err, results) {
-        if (err) {
-            throw err;
-        }
-        var data = [];
-        for (var i = 0; i < results.length; i++) {
-            data.push({label: results[i][1].join(), value: results[i][0], color: colors[i]})
-        }
-        res.json(data)
-    })
+    statsGraph.nodeCounts()
+        .then(function (results) {
+            var data = [];
+            for (var i = 0; i < results.length; i++) {
+                data.push({label: results[i][1].join(), value: results[i][0], color: colors[i]})
+            }
+            res.json(data)
+        })
 });
 
 module.exports = router;

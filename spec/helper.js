@@ -1,11 +1,11 @@
-var neo4j = require('../lib/neo4j').neo4j;
+var query = require('../lib/neo4j').query;
 var assert = require('assert');
 var request = require('supertest');
 var async = require('async');
 
 exports.purgeAll = function (cb) {
     var cypher = 'MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r';
-    neo4j.query(cypher).then(cb.bind(null, null))
+    query(cypher).run().then(cb.bind(null, null))
 };
 
 exports.importServerFileFixtures = function (app, fqdn, files) {
@@ -30,7 +30,7 @@ exports.importServerResourceFixtures = function (app, fqdn, files) {
 exports.assertNodeCount = function (type, count) {
     return function (cb) {
         var cypher = 'MATCH (n:' + type + ') RETURN n';
-        neo4j.query(cypher)
+        query(cypher).run()
             .then(function (result) {
                 assert.equal(result.data.length, count);
                 cb(null, result.data);
@@ -42,7 +42,7 @@ exports.assertNodeCount = function (type, count) {
 exports.assertServerProperty = function (fqdn, field, value) {
     return function (cb) {
         var cypher = 'MATCH (s:Server) WHERE s.fqdn = {fqdn} RETURN s';
-        neo4j.query(cypher, {fqdn: fqdn})
+        query(cypher).run({fqdn: fqdn})
             .then(function (result) {
                 assert.equal(result.data[0][0].data[field], value);
                 cb(null);
@@ -54,7 +54,7 @@ exports.assertServerProperty = function (fqdn, field, value) {
 exports.assertServerScore = function (fqdn, score) {
     return function (cb) {
         var cypher = 'MATCH (s:Server)-[r:USES]-() WHERE s.fqdn = {fqdn} RETURN COUNT(r) ';
-        neo4j.query(cypher, {fqdn: fqdn})
+        query(cypher).run({fqdn: fqdn})
             .then(function (result) {
                 assert.equal(result.data[0][0], score);
                 cb(null);
@@ -67,7 +67,7 @@ exports.assertRelationProperty = function (fqdn, resource, field, value) {
     var arg = arguments;
     return function (cb) {
         var cypher = 'MATCH (s:Server)<-[r:CHANGES]-(rr:Resource) WHERE s.fqdn = {fqdn} AND rr.name = {resource} RETURN r';
-        neo4j.query(cypher, {fqdn: fqdn, resource: resource})
+        query(cypher).run({fqdn: fqdn, resource: resource})
             .then(function (result) {
                 var fieldValue = result.data[0][0].data[field];
                 if (typeof value == 'function') {
