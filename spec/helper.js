@@ -2,6 +2,7 @@ var query = require('../lib/neo4j').query;
 var assert = require('assert');
 var request = require('supertest');
 var async = require('async');
+var debug = require('debug')('mnfst:test:helper');
 
 exports.purgeAll = function (cb) {
     var cypher = 'MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r';
@@ -108,7 +109,7 @@ exports.triggerServerResourceChangePing = function (app, fqdn, data, cnt) {
 
 exports.between = function (a, c) {
     return function (b) {
-        console.log('a: ' + a + ' b:' + b + ' c:' + c + ' >> ' + (b > a && b < c))
+        debug('a: %d b: %d c: %d >> %s',a,b,c,(b > a && b < c))
         return b > a && b < c
     }
 }
