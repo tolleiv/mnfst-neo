@@ -4,10 +4,20 @@ block content
 
     .row
         .col-md-6
-            .panel.panel-default
-                .panel-heading Resource activity distribution
-                .panel-body
-                    #resourceActivityChart
+            .container
+                .row
+                    .col-md-6
+                        .panel.panel-default
+                            .panel-heading Resource activity distribution
+                            .panel-body
+                                #resourceActivityChart
+                .row
+                    .col-md-6
+                        .panel.panel-default
+                            .panel-heading Resource failure distribution
+                            .panel-body
+                                #resourceFailureChart
+
 
         .col-md-6
             .container
@@ -18,11 +28,12 @@ block content
                                 tr
                                     th Resource
                                     th Activity rate
-
+                                    th Failure rate
                                 each res in activeResources
                                     tr
                                         td= res.name
                                         td= res.score
+                                        td= res.failed
                 .row
                     .col-md-6
                         .panel.panel-default

@@ -11,6 +11,7 @@ var colors = ['#00bbde', '#8a8ad6', '#eeb058', '#fe6672', '#ff855c', '#00cfbb', 
 router.get('/', function (req, res, next) {
     res.redirect('/ui/dashboards/files');
 });
+
 router.get('/ui/dashboards/files', function (req, res, next) {
     async.series([
         function (cb) {
@@ -28,6 +29,7 @@ router.get('/ui/dashboards/files', function (req, res, next) {
         res.render('dashboard-file', {title: 'Mnfst - Files dashboard', influencialFiles: results[0]});
     });
 });
+
 router.get('/ui/dashboards/resources', function (req, res, next) {
     async.series([
         function (cb) {
@@ -35,7 +37,11 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
                 .then(function (results) {
                     var data = [];
                     for (var i = 0; i < Math.min(10, results.length); i++) {
-                        data.push({name: results[i][0], score: Math.round(results[i][2] * 1000) / 1000})
+                        data.push({
+                            name: results[i][0],
+                            score: Math.round(results[i][2] * 1000) / 1000,
+                            failed: Math.round(results[i][3] * 1000) / 1000
+                        })
                     }
                     cb(null, data);
                 })
@@ -45,6 +51,7 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
         res.render('dashboard-resource', {title: 'Mnfst - Resource dashboard', activeResources: results[0]});
     });
 });
+
 router.get('/ui/dashboards/servers', function (req, res, next) {
     async.series([
         function (cb) {
@@ -58,7 +65,9 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
                             files: results.data[i][1],
                             resources: results.data[i][2],
                             rate: Math.round(results.data[i][3] * 1000) / 1000,
-                            max_rate: Math.round(results.data[i][4] * 1000) / 1000
+                            max_rate: Math.round(results.data[i][4] * 1000) / 1000,
+                            failed: Math.round(results.data[i][5] * 1000) / 1000,
+                            max_failed: Math.round(results.data[i][6] * 1000) / 1000
                         });
                     }
                     cb(null, data);

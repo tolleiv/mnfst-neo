@@ -47,9 +47,9 @@ $(function () {
     if (document.getElementById("fileScoreDots")) {
         var fileScoreDotsSvg = dimple.newSvg("#fileScoreDots", 520, 300);
         d3.json("/files", function (data) {
-            var chartData=[];
+            var chartData = [];
             for (var i = 0; i < data.length; i++) {
-                chartData.push({File: data[i][0],ServerCount:data[i][1], WeightScore: data[i][2]})
+                chartData.push({File: data[i][0], ServerCount: data[i][1], WeightScore: data[i][2]})
             }
 
             var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);
@@ -61,25 +61,44 @@ $(function () {
         });
     }
 
-    if (document.getElementById("resourceActivityChart")) {
+    if (document.getElementById("resourceActivityChart") && document.getElementById("resourceFailureChart")) {
         var resourceActivitySvg = dimple.newSvg("#resourceActivityChart", 520, 300);
+        var resourceFailureSvg = dimple.newSvg("#resourceFailureChart", 520, 300);
         d3.json("/resources", function (data) {
             var chartData = [];
             for (var i = 0; i < data.length; i++) {
                 if (Math.round(data[i][2] * 1000) / 1000 > 0) {
                     var t = data[i][0].split('[')[0] || 'Unknown';
-                    chartData.push({Name: data[i][0], Amount: data[i][1], Rate: data[i][2], Type: t})
+                    chartData.push({
+                        Name: data[i][0],
+                        Amount: data[i][1],
+                        Rate: data[i][2],
+                        Failures: data[i][3],
+                        Type: t
+                    })
                 }
             }
+
+
             var resourceActivityChart = new dimple.chart(resourceActivitySvg, chartData);
             resourceActivityChart.setBounds(50, 30, 370, 230);
             var x = resourceActivityChart.addMeasureAxis("x", "Amount");
             x.title = "Effected systems";
             var y = resourceActivityChart.addMeasureAxis("y", "Rate");
             y.title = "Change rate";
-            var series1 = resourceActivityChart.addSeries(["Name", "Type"], dimple.plot.bubble);
+            resourceActivityChart.addSeries(["Name", "Type"], dimple.plot.bubble);
             resourceActivityChart.addLegend(440, 10, 50, 200);
             resourceActivityChart.draw();
+
+            var resourceFailuresChart = new dimple.chart(resourceFailureSvg, chartData);
+            resourceFailuresChart.setBounds(50, 30, 370, 230);
+            var x = resourceFailuresChart.addMeasureAxis("x", "Amount");
+            x.title = "Effected systems";
+            var y = resourceFailuresChart.addMeasureAxis("y", "Failures");
+            y.title = "Failure rate";
+            resourceFailuresChart.addSeries(["Name", "Type"], dimple.plot.bubble);
+            resourceFailuresChart.addLegend(440, 10, 50, 200);
+            resourceFailuresChart.draw();
         });
     }
     if (document.getElementById("serverActivityChart")) {
@@ -87,22 +106,26 @@ $(function () {
         d3.json("/server", function (results) {
             var chartData = [];
             for (var i = 0; i < results.data.length; i++) {
-                chartData.push({
-                    Server: results.data[i][0].data.fqdn,
-                    Weight: results.data[i][0].data.weight || 1,
-                    Files: results.data[i][1],
-                    Resources: results.data[i][2],
-                    Rate: Math.round(results.data[i][4] * 1000) / 1000
-                });
+                var change = Math.round(results.data[i][4] * 1000) / 1000;
+                var failure = Math.round(results.data[i][6] * 1000) / 1000;
+                if (change+failure >0) {
+                    chartData.push({
+                        Server: results.data[i][0].data.fqdn,
+                        Weight: results.data[i][0].data.weight || 1,
+                        Files: results.data[i][1],
+                        Resources: results.data[i][2],
+                        Rate: change+failure,
+                        Change: change,
+                        Failure: failure
+                    });
+                }
             }
 
             var serverActivityChart = new dimple.chart(serverActivitySvg, chartData);
             serverActivityChart.setBounds(50, 30, 440, 230);
             var x = serverActivityChart.addMeasureAxis("x", "Files");
-            var y = serverActivityChart.addMeasureAxis("y", "Rate");
-            y.title = "Maximum rate";
-            var series1 = serverActivityChart.addSeries(["Server", "Weight"], dimple.plot.bubble);
-            // serverActivityChart.addLegend(10, 10, 360, 20, "right");
+            serverActivityChart.addMeasureAxis("y", "Rate");
+            serverActivityChart.addSeries(["Server", "Failure"], dimple.plot.bubble);
             serverActivityChart.draw();
         });
     }
