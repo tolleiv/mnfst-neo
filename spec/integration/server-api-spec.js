@@ -129,6 +129,21 @@ describe('the server API', function () {
             )
             ;
         });
+        it('can adjust failure values', function (done) {
+            var s = 'system11.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s,
+                        ["apache.pp\tService[apache2]", "system3.pp\tExec[do]"]),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'failed10', 0),
+                    helper.triggerServerResourcePing(app, s, {failed: ['Exec[do]']}, 50),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'failed10', between(0.9, 1))
+                ],
+                done
+            )
+            ;
+        });
         it('unchanged resources will adjust all values to zero automatically', function (done) {
             var s = 'system10.localdom';
             async.series([

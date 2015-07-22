@@ -33,7 +33,11 @@ router.post('/:fqdn/rates/changes', function (req, res, next) {
 });
 
 router.post('/:fqdn/rates', function (req, res, next) {
-    var p = {fqdn: req.params.fqdn, changes: req.body.changes};
+    var p = {
+        fqdn: req.params.fqdn,
+        changes: req.body.changes || [],
+        failures: req.body.failures || []
+    };
     serverGraph.updateServerResourceRate(p)
         .then(ok.bind(res))
         .catch(err.bind(res))

@@ -74,7 +74,8 @@ exports.assertRelationProperty = function (fqdn, resource, field, value) {
                 if (typeof value == 'function') {
                     assert(value(fieldValue), JSON.stringify(arg) + '=' + fieldValue)
                 } else {
-                    assert.equal(fieldValue, value, JSON.stringify(arg) + '=' + fieldValue);
+                    debug('%s == %s',fieldValue, value);
+                    assert.equal(fieldValue, value, JSON.stringify(arg) + '<not equal>' + fieldValue);
                 }
                 cb(null);
             })
