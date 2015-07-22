@@ -65,8 +65,10 @@ exports.assertServerScore = function (fqdn, score) {
 };
 
 exports.assertRelationProperty = function (fqdn, resource, field, value) {
+
     var arg = arguments;
     return function (cb) {
+        debug('%s: %s : %s : %s : %s', 'assertRelationProperty', fqdn, resource, field, value);
         var cypher = 'MATCH (s:Server)<-[r:CHANGES]-(rr:Resource) WHERE s.fqdn = {fqdn} AND rr.name = {resource} RETURN r';
         query(cypher).run({fqdn: fqdn, resource: resource})
             .then(function (result) {
@@ -74,7 +76,7 @@ exports.assertRelationProperty = function (fqdn, resource, field, value) {
                 if (typeof value == 'function') {
                     assert(value(fieldValue), JSON.stringify(arg) + '=' + fieldValue)
                 } else {
-                    debug('%s == %s',fieldValue, value);
+                    debug('equal? %s == %s (%s)', fieldValue, value, fieldValue == value);
                     assert.equal(fieldValue, value, JSON.stringify(arg) + '<not equal>' + fieldValue);
                 }
                 cb(null);
@@ -110,7 +112,7 @@ exports.triggerServerResourceChangePing = function (app, fqdn, data, cnt) {
 
 exports.between = function (a, c) {
     return function (b) {
-        debug('a: %d b: %d c: %d >> %s',a,b,c,(b > a && b < c))
+        debug('between? %d < _%d_ < %d >> %s', a, b, c, (b > a && b < c))
         return b > a && b < c
     }
 }

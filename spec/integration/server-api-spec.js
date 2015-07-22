@@ -135,7 +135,7 @@ describe('the server API', function () {
                     helper.importServerResourceFixtures(app, s,
                         ["apache.pp\tService[apache2]", "system3.pp\tExec[do]"]),
                     helper.assertRelationProperty(s, 'Exec[do]', 'failed10', 0),
-                    helper.triggerServerResourcePing(app, s, {failed: ['Exec[do]']}, 50),
+                    helper.triggerServerResourcePing(app, s, {failures: ['Exec[do]']}, 50),
                     helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
                     helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
                     helper.assertRelationProperty(s, 'Exec[do]', 'failed10', between(0.9, 1))

@@ -26,7 +26,7 @@ router.put('/:fqdn', file_param, function (req, res, next) {
 
 router.post('/:fqdn/rates/changes', function (req, res, next) {
     var resources = req.body.split('\n');
-    var p = {fqdn: req.params.fqdn, changes: resources};
+    var p = {fqdn: req.params.fqdn, changes: resources, failures: []};
     serverGraph.updateServerResourceRate(p)
         .then(ok.bind(res))
         .catch(err.bind(res))
