@@ -24,11 +24,11 @@ block content
                 table.table.table-striped
                     tr
                         th Server
-                        th Changerate (avg)
-                        th Changerate (max)
+                        th Change rate (max)
+                        th Failure rate (max)
 
                     each server in servers
                         tr
                             td= server.fqdn
-                            td= server.rate
                             td= server.max_rate
+                            td= server.max_failed
