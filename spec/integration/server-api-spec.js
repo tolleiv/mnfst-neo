@@ -202,7 +202,43 @@ describe('the server API', function () {
             )
             ;
         });
+
     });
 
+    it('can list servers, sorted by rate values', function (done) {
+        var s1 = 'noscore.localdom';
+        var s2 = 'score.localdom';
+        async.series([
+                helper.importServerResourceFixtures(app, s1,
+                    ["apache.pp\tService[apache2]", "noscore.pp\tExec[do]"]),
+                helper.importServerResourceFixtures(app, s2,
+                    ["apache.pp\tService[apache2]", "somescore.pp\tExec[do]"]),
+                helper.triggerServerResourcePing(app, s2, {changes: ['Exec[do]']}, 5),
+                function (cb) {
+                    request(app)
+                        .get('/server/')
+                        .expect(function(result) {
+                            res = JSON.parse(result.res.text);
+                            expect(res.data[0][0].data.fqdn).toEqual('score.localdom');
+                            expect(res.data[1][0].data.fqdn).toEqual('noscore.localdom')
+                        })
+                        .expect(200, cb);
+                },
+                helper.triggerServerResourcePing(app, s1, {changes: ['Exec[do]']}, 50),
+                function (cb) {
+                    request(app)
+                        .get('/server/')
+                        .expect(function(result) {
+                            res = JSON.parse(result.res.text);
+                            expect(res.data[0][0].data.fqdn).toEqual('noscore.localdom')
+                            expect(res.data[1][0].data.fqdn).toEqual('score.localdom');
+                        })
+                        .expect(200, cb);
+                }
+            ],
+            done
+        )
+        ;
+    });
 })
 ;
