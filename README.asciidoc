@@ -103,8 +103,6 @@ The extended file+resource list should be an array of objects each with the file
 
 ## TODO List
 
- * Resource Error rates should be included
- * Resource deletion / absence handling tbd
  * Per File / Server dashboard
  * Puppet, Chef, Ansible integration workflow needs to be documented
  * Metrics generation, best practices need to be documented
