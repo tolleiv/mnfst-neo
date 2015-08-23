@@ -94,4 +94,27 @@ describe('the file API', function () {
             ],
             done);
     });
+
+    it('can cleanup unused files', function(done) {
+        async.series([
+                helper.importServerFileFixtures(app, 'one.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/some.pp']),
+                helper.importServerFileFixtures(app, 'other.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/other.pp']),
+                helper.assertNodeCount('File', 3),
+                function (cb) {
+                    request(app)
+                        .delete('/server/one.localdom')
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('File', 3),
+                function (cb) {
+                    request(app)
+                        .delete('/files')
+                        .expect(200, cb);
+                },
+                helper.assertNodeCount('File', 2)
+            ],
+            done);
+    });
 });

@@ -16,6 +16,12 @@ describe('the parameter parsing', function () {
         expect(parser(request, response).value()).toEqual(expected);
     }
 
+    it('does not break if no input is present', function () {
+        assertParserResult(
+            undefined,[]
+        );
+    });
+
     it('transforms a simple file list to an array', function () {
         assertParserResult(
             "file1\nfile2\nfile3",

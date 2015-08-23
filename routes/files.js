@@ -16,9 +16,17 @@ router.get('/', function (req, res) {
 });
 
 router.delete('/', file_param, function (req, res) {
-    fileGraph.deleteFiles(req.params.files).then(function (result) {
-        res.send('OK')
-    });
+
+    if (req.params.files.length == 0) {
+        fileGraph.cleanupFiles().then(function () {
+            res.send('OK')
+        });
+    } else {
+        fileGraph.deleteFiles(req.params.files).then(function () {
+            res.send('OK')
+        });
+    }
+
 });
 
 module.exports = router;
