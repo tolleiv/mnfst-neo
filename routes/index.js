@@ -18,7 +18,7 @@ router.get('/ui/dashboards/files', function (req, res, next) {
             fileGraph.scoreByFile()
                 .then(function (results) {
                     var data = [];
-                    for (var i = 0; i < Math.min(15, results.length); i++) {
+                    for (var i = 0; i < results.length; i++) {
                         data.push({name: results[i][0], count: results[i][1], score: results[i][2]})
                     }
                     cb(null, data);

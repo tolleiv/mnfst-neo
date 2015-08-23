@@ -54,8 +54,8 @@ $(function () {
 
             var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);
             fileScoreDotChart.setBounds(50, 30, 450, 230);
-            var x = fileScoreDotChart.addLogAxis("x", "ServerCount");
-            var y = fileScoreDotChart.addLogAxis("y", "WeightScore");
+            fileScoreDotChart.addLogAxis("x", "WeightScore");
+            fileScoreDotChart.addLogAxis("y", "ServerCount");
             var series1 = fileScoreDotChart.addSeries("File", dimple.plot.bubble);
             fileScoreDotChart.draw();
         });
