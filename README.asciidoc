@@ -9,9 +9,11 @@ This tool is a small graph driven approach to deal with that risk and answer the
 
  * Which systems might be effected by a code change in a certain set of files
  * What is the overall risk /reach of a certain change
- * Which `resources` are provisioned actually provided by
+ * Which provisioned `resources` are problematic (too active / failing in all runs)
 
-It's supposed to be versatile and not tool specific. Nevertheless, it's currently just used to companion our Puppet Server and it's Puppet Dashboard. The datamodule and the interface it not Puppet specific, though.
+Along with that main purpose, it's also able to couple monitoring and provisioning tools (documentation pending).
+
+It's supposed to be versatile and not tool specific. Nevertheless, it's currently just used to companion our Puppet Server and it's Puppet Dashboard. The datamodule and the interface it not Puppet specific, though. You'll find https://gist.github.com/tolleiv/4ae437429129a9f2f50e[some wrapper scripts] in order to get it to work with Puppet.
 
 ## Screenshots
 
@@ -28,6 +30,7 @@ image:https://gist.github.com/tolleiv/ae631eeff0a954cf3f29/raw/file-score-distri
  3. Run `npm install`
  4. Run `npm start`
  5. Push in some data
+    * E.g. with the https://gist.github.com/tolleiv/4ae437429129a9f2f50e[Puppet wrapper scripts]
  6. Check the dashboard under `http://localhost:3000`
 
 ## Usage
