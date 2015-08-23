@@ -67,13 +67,17 @@ $(function () {
         d3.json("/resources", function (data) {
             var chartData = [];
             for (var i = 0; i < data.length; i++) {
-                if (Math.round(data[i][2] * 1000) / 1000 > 0) {
+
+                changeRate = Math.round(data[i][2] * 1000) / 1000;
+                failureRate = Math.round(data[i][3] * 1000) / 1000;
+
+                if (changeRate > 0 || failureRate > 0) {
                     var t = data[i][0].split('[')[0] || 'Unknown';
                     chartData.push({
                         Name: data[i][0],
                         Amount: data[i][1],
-                        Rate: data[i][2],
-                        Failures: data[i][3],
+                        Rate: changeRate,
+                        Failures: failureRate,
                         Type: t
                     })
                 }
@@ -108,13 +112,13 @@ $(function () {
             for (var i = 0; i < results.data.length; i++) {
                 var change = Math.round(results.data[i][4] * 1000) / 1000;
                 var failure = Math.round(results.data[i][6] * 1000) / 1000;
-                if (change+failure >0) {
+                if (change + failure > 0) {
                     chartData.push({
                         Server: results.data[i][0].data.fqdn,
                         Weight: results.data[i][0].data.weight || 1,
                         Files: results.data[i][1],
                         Resources: results.data[i][2],
-                        Rate: change+failure,
+                        Rate: change + failure,
                         Change: change,
                         Failure: failure
                     });
