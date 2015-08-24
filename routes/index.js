@@ -57,20 +57,7 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
         function (cb) {
             serverGraph.list()
                 .then(function (results) {
-                    var data = [];
-                    for (var i = 0; i < results.data.length; i++) {
-                        data.push({
-                            fqdn: results.data[i][0].data.fqdn,
-                            weight: results.data[i][0].data.weight || 1,
-                            files: results.data[i][1],
-                            resources: results.data[i][2],
-                            rate: Math.round(results.data[i][3] * 1000) / 1000,
-                            max_rate: Math.round(results.data[i][4] * 1000) / 1000,
-                            failed: Math.round(results.data[i][5] * 1000) / 1000,
-                            max_failed: Math.round(results.data[i][6] * 1000) / 1000
-                        });
-                    }
-                    cb(null, data);
+                    cb(null, results);
                 })
                 .catch(cb);
         }

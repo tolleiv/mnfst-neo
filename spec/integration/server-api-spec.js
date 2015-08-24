@@ -84,7 +84,7 @@ describe('the server API', function () {
 
     it('can purge servers', function (done) {
         async.series([
-                helper.importServerFileFixtures(app, 'system2.localdom', [ 'manifest/system2.pp']),
+                helper.importServerFileFixtures(app, 'system2.localdom', ['manifest/system2.pp']),
                 helper.importServerFileFixtures(app, 'system3.localdom',
                     ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
                 helper.assertNodeCount('Server', 2),
@@ -187,7 +187,7 @@ describe('the server API', function () {
             ;
         });
 
-        it('can adjust change rate values seperately', function (done) {
+        it('can adjust change rate values separately', function (done) {
             var s = 'system13.localdom';
             async.series([
                     helper.importServerResourceFixtures(app, s,
@@ -198,6 +198,33 @@ describe('the server API', function () {
                     helper.assertRelationProperty(s, 'Exec[do]', 'rate10', between(0.9, 1)),
                     helper.assertRelationProperty(s, 'Exec[foo]', 'rate10', between(0.9, 1)),
                     helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0)
+                ],
+                done
+            )
+            ;
+        });
+
+        it('exposes change/failure rates through the API', function (done) {
+            var s = 'system14.localdom';
+            async.series([
+                    helper.importServerResourceFixtures(app, s,
+                        ["apache.pp\tService[apache2]", "system13.pp\tExec[do]", "system13.pp\tExec[foo]"]),
+                    helper.assertRelationProperty(s, 'Exec[do]', 'rate10', 0),
+                    helper.assertRelationProperty(s, 'Service[apache2]', 'rate10', 0),
+                    helper.triggerServerResourceChangePing(app, s, "Exec[do]\nExec[foo]", 50),
+                    function (cb) {
+                        request(app)
+                            .get('/server/' + s)
+                            .expect(function (result) {
+                                res = JSON.parse(result.res.text);
+                                expect(res.fqdn).toEqual('system14.localdom');
+                                expect(res.weight).toEqual(1);
+                                expect(res.max_rate).toBeLessThan(1);
+                                expect(res.max_rate).toBeGreaterThan(0.8);
+                                expect(res.max_failed).toEqual(0);
+                            })
+                            .expect(200, cb);
+                    }
                 ],
                 done
             )
@@ -218,10 +245,10 @@ describe('the server API', function () {
                 function (cb) {
                     request(app)
                         .get('/server/')
-                        .expect(function(result) {
+                        .expect(function (result) {
                             res = JSON.parse(result.res.text);
-                            expect(res.data[0][0].data.fqdn).toEqual('score.localdom');
-                            expect(res.data[1][0].data.fqdn).toEqual('noscore.localdom')
+                            expect(res[0].fqdn).toEqual('score.localdom');
+                            expect(res[1].fqdn).toEqual('noscore.localdom');
                         })
                         .expect(200, cb);
                 },
@@ -229,10 +256,10 @@ describe('the server API', function () {
                 function (cb) {
                     request(app)
                         .get('/server/')
-                        .expect(function(result) {
+                        .expect(function (result) {
                             res = JSON.parse(result.res.text);
-                            expect(res.data[0][0].data.fqdn).toEqual('noscore.localdom')
-                            expect(res.data[1][0].data.fqdn).toEqual('score.localdom');
+                            expect(res[0].fqdn).toEqual('noscore.localdom');
+                            expect(res[1].fqdn).toEqual('score.localdom');
                         })
                         .expect(200, cb);
                 }

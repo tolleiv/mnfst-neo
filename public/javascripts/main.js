@@ -109,18 +109,17 @@ $(function () {
         var serverActivitySvg = dimple.newSvg("#serverActivityChart", 520, 300);
         d3.json("/server", function (results) {
             var chartData = [];
-            for (var i = 0; i < results.data.length; i++) {
-                var change = Math.round(results.data[i][4] * 1000) / 1000;
-                var failure = Math.round(results.data[i][6] * 1000) / 1000;
-                if (change + failure > 0) {
+
+            for (var i = 0; i < results.length; i++) {
+                if ((results[i].max_rate + results[i].max_failed) > 0) {
                     chartData.push({
-                        Server: results.data[i][0].data.fqdn,
-                        Weight: results.data[i][0].data.weight || 1,
-                        Files: results.data[i][1],
-                        Resources: results.data[i][2],
-                        Rate: change + failure,
-                        Change: change,
-                        Failure: failure
+                        Server: results[i].fqdn,
+                        Weight: results[i].weight || 1,
+                        Files: results[i].files,
+                        Resources: results[i].resources,
+                        Rate: results[i].max_rate + results[i].max_failed,
+                        Change: results[i].max_rate,
+                        Failure: results[i].max_failed
                     });
                 }
             }

@@ -12,13 +12,17 @@ function err(e) {
 }
 
 router.get('/:fqdn', function (req, res, next) {
-    res.sendStatus(200)
+    var p = {fqdn: req.params.fqdn};
+    serverGraph.show(p)
+        .then(function (results) {
+            res.json(results)
+        });
 });
 
 router.put('/:fqdn', file_param, function (req, res, next) {
     async.eachSeries(req.params.files, function iterator(item, callback) {
         var p = {fqdn: req.params.fqdn, path: item.file, resource: item.resource || null};
-        serverGraph.linkServerToFile(p).then(callback.bind(null,null)).catch(callback)
+        serverGraph.linkServerToFile(p).then(callback.bind(null, null)).catch(callback)
     }, function (err) {
         res.status(err == null ? 200 : 500).send(err || 'OK')
     });
