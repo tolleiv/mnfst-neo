@@ -78,6 +78,44 @@ describe('the file API', function () {
             done);
     });
 
+    it('can list the affected servers', function(done) {
+        async.series([
+                helper.importServerFileFixtures(app, 'system3.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/system3.pp']),
+                helper.importServerFileFixtures(app, 'system4.localdom',
+                    ['manifest/system4.pp', 'module/apache/manifest/apache.pp', 'manifest/base.pp']),
+                helper.importServerFileFixtures(app, 'system5.localdom',
+                    ['module/apache/manifest/apache.pp', 'manifest/base.pp']),
+                function (cb) {
+                    request(app)
+                        .get('/files/servers')
+                        .set('Content-Type', 'text/plain')
+                        .send("manifest/base.pp")
+                        .expect(function (result) {
+                            res = result.res.text.split('\n');
+                            expect(res.length).toEqual(2);
+                            expect(res[0]).toEqual('system4.localdom');
+                            expect(res[1]).toEqual('system5.localdom');
+                        })
+                        .expect(200, cb);
+                },
+                function (cb) {
+                    request(app)
+                        .get('/files/servers')
+                        .set('Content-Type', 'application/json')
+                        .send(["manifest/base.pp"])
+                        .expect(function (result) {
+                            res = JSON.parse(result.res.text)
+                            expect(res.length).toEqual(2);
+                            expect(res[0].fqdn).toEqual('system4.localdom');
+                            expect(res[1].fqdn).toEqual('system5.localdom');
+                        })
+                        .expect(200, cb);
+                }
+            ],
+            done);
+    });
+
     it('can purge files', function(done) {
         async.series([
                 helper.importServerFileFixtures(app, 'some.localdom',

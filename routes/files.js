@@ -9,6 +9,25 @@ router.get('/score', file_param, function (req, res) {
     });
 });
 
+router.get('/servers', file_param, function (req, res) {
+    fileGraph.affectedServers(req.params.files).then(function (result) {
+
+        switch (req.get('Content-Type')) {
+            case 'text/plain':
+            case 'text/csv':
+                var list = result.map(function (o) {
+                    return o.fqdn
+                });
+                res.send(list.join('\n'));
+                break;
+            default:
+            case 'application/json':
+                res.json(result);
+                break;
+        }
+    });
+});
+
 router.get('/', function (req, res) {
     fileGraph.scoreByFile().then(function (result) {
         res.json(result)
