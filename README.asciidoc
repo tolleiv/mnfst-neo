@@ -106,11 +106,11 @@ The extended file+resource list should be an array of objects each with the file
 
 ## TODO List
 
- * Per File / Server dashboard
  * Puppet, Chef, Ansible integration workflow needs to be documented
  * Metrics generation, best practices need to be documented
  * The tool needs a proper name
  * Full demo dataset / demo instance tbd
+ * Consolidated numbers ... rounding on the server
  * Charts should be resizeable
 
 ## License
