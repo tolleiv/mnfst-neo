@@ -35,20 +35,27 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
         function (cb) {
             resourceGraph.scoreForResources()
                 .then(function (results) {
-                    /*var data = [];
-                    for (var i = 0; i < Math.min(10, results.length); i++) {
-                        data.push({
-                            name: results[i][0],
-                            score: Math.round(results[i][2] * 1000) / 1000,
-                            failed: Math.round(results[i][3] * 1000) / 1000
-                        })
-                    }*/
                     cb(null, results);
                 })
                 .catch(cb);
         }
     ], function (err, results) {
-        res.render('dashboard-resource', {title: 'Mnfst - Resource dashboard', activeResources: results[0]});
+        res.render('dashboard-resource-list', {title: 'Mnfst - Resource dashboard', activeResources: results[0]});
+    });
+});
+
+router.get('/ui/dashboards/resource/:id', function (req, res, next) {
+    async.series([
+        function (cb) {
+            resourceGraph.showResource({id: parseInt(req.params.id)})
+                .then(function (results) {
+                    cb(null, results);
+                })
+                .catch(cb);
+        }
+    ], function (err, results) {
+        console.log(results[0])
+        res.render('dashboard-resource-single', {title: 'Mnfst - Resource dashboard', resource: results[0]});
     });
 });
 

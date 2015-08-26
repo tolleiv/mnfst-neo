@@ -31,7 +31,8 @@ block content
                                     th Failure rate
                                 each res in activeResources
                                     tr
-                                        td= res.Name
+                                        td
+                                            a(href='/ui/dashboards/resource/' + res.id)= res.Name
                                         td= res.Rate
                                         td= res.Failures
                 .row

@@ -1,0 +1,31 @@
+extends layout
+
+block content
+
+    h3= 'Resource "' + resource.resource.data.name + '"'
+
+
+    .container
+        .row
+            .col-md-6
+                h4 Related files
+                table.table.table-striped
+                    tr
+                        th File name
+                    each file in resource.files
+                        tr
+                            td= file.data.name
+
+            .col-md-6
+                h4 Related servers
+
+                table.table.table-striped
+                    tr
+                        th Server
+                        th Change rate
+                        th Failure rate
+                    each server in resource.servers
+                        tr
+                            td= server[0].data.fqdn
+                            td= Math.round(server[1].data.rate10*1000)/1000
+                            td= Math.round(server[1].data.failed10 * 1000) / 1000
