@@ -1,4 +1,7 @@
 $(function () {
+
+    $(".table-striped").tablesorter();
+
     if (document.getElementById("countsChart")) {
         var countsSvg = dimple.newSvg("#countsChart", 520, 150);
         d3.json('/data/node-types.json', function (data) {

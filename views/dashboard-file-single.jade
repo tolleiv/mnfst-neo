@@ -5,31 +5,32 @@ block content
     h3= 'File "' + file.file.data.name + '"'
 
 
-    .container
+    .container-fluid
         .row
             .col-md-6
                 h4 Related resources
                 table.table.table-striped
-                    tr
-                        th File name
-                    each resource in file.resources
+                    thead
                         tr
+                            th File name
+                    tbody
+                        each resource in file.resources
+                            tr
 
-                            td
-                                a(href='/ui/dashboards/resource/' + resource.metadata.id)= resource.data.name
-
-
-
+                                td
+                                    a(href='/ui/dashboards/resource/' + resource.metadata.id)= resource.data.name
 
             .col-md-6
                 h4 Related servers
 
                 table.table.table-striped
-                    tr
-                        th Server
-                        th Weight
-                    each server in file.servers
+                    thead
                         tr
-                            td
-                                a(href='/ui/dashboards/server/' + server.metadata.id)= server.data.fqdn
-                            td= server.data.weight
+                            th Server
+                            th Weight
+                    tbody
+                        each server in file.servers
+                            tr
+                                td
+                                    a(href='/ui/dashboards/server/' + server.metadata.id)= server.data.fqdn
+                                td= server.data.weight

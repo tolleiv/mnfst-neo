@@ -4,32 +4,31 @@ block content
 
     .row
         .col-md-6
-            .container
+            .container-fluid
                 .row
-                    .col-md-6
-                        .panel.panel-default
-                            .panel-heading Server activity rate
-                            .panel-body
-                                #serverActivityChart
+                    .panel.panel-default
+                        .panel-heading Server activity rate
+                        .panel-body
+                            #serverActivityChart
 
                 .row
-                    .col-md-6
-                        .panel.panel-default
-                            .panel-heading Entity counts
-                            .panel-body
-                                #countsChart
+                    .panel.panel-default
+                        .panel-heading Entity counts
+                        .panel-body
+                            #countsChart
 
         .col-md-6
             .panel.panel-default
                 table.table.table-striped
-                    tr
-                        th Server
-                        th Change rate (max)
-                        th Failure rate (max)
-
-                    each server in servers
+                    thead
                         tr
-                            td
-                                a(href='/ui/dashboards/server/' + server.id)= server.fqdn
-                            td= server.max_rate
-                            td= server.max_failed
+                            th Server
+                            th Change rate (max)
+                            th Failure rate (max)
+                    tbody
+                        each server in servers
+                            tr
+                                td
+                                    a(href='/ui/dashboards/server/' + server.id)= server.fqdn
+                                td= server.max_rate
+                                td= server.max_failed

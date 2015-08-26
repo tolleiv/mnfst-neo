@@ -5,31 +5,33 @@ block content
     h3= 'Server "' + server.server.data.fqdn + '"'
 
 
-    .container
+    .container-fluid
         .row
             .col-md-6
                 h4 Related resources
                 table.table.table-striped
-                    tr
-                        th Resource name
-                        th Change rate
-                        th Failure rate
-                    each resource in server.resources
+                    thead
                         tr
+                            th Resource name
+                            th Change rate
+                            th Failure rate
+                    tbody
+                        each resource in server.resources
+                            tr
 
-                            td
-                                a(href='/ui/dashboards/resource/' + resource[0].metadata.id)= resource[0].data.name
-                            td= Math.round(resource[1].data.rate10 * 1000) / 1000
-                            td= Math.round(resource[1].data.failed10 * 1000) / 1000
-
-
+                                td
+                                    a(href='/ui/dashboards/resource/' + resource[0].metadata.id)= resource[0].data.name
+                                td= Math.round(resource[1].data.rate10 * 1000) / 1000
+                                td= Math.round(resource[1].data.failed10 * 1000) / 1000
 
             .col-md-6
                 h4 Related files
                 table.table.table-striped
-                    tr
-                        th File name
-                    each file in server.files
+                    thead
                         tr
-                            td
-                                a(href='/ui/dashboards/file/' + file.metadata.id)= file.data.name
+                            th File name
+                    tbody
+                        each file in server.files
+                            tr
+                                td
+                                    a(href='/ui/dashboards/file/' + file.metadata.id)= file.data.name

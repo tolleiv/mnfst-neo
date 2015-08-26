@@ -10,3 +10,22 @@ body > .container {
 .table-striped a {
     color: #337ab7
 }
+
+.table-striped th.header {
+    background-image: url(../img/small.gif);
+    cursor: pointer;
+    font-weight: bold;
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 20px;
+    border-right: 1px solid #dad9c7;
+    margin-left: -1px;
+}
+.table-striped th.headerSortDown {
+    background-image: url(../img/small_desc.gif);
+    background-color: #5bc0de;
+}
+.table-striped th.headerSortUp {
+    background-image: url(../img/small_asc.gif);
+    background-color: #5bc0de;
+}
