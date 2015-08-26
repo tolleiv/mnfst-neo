@@ -35,15 +35,15 @@ router.get('/ui/dashboards/resources', function (req, res, next) {
         function (cb) {
             resourceGraph.scoreForResources()
                 .then(function (results) {
-                    var data = [];
+                    /*var data = [];
                     for (var i = 0; i < Math.min(10, results.length); i++) {
                         data.push({
                             name: results[i][0],
                             score: Math.round(results[i][2] * 1000) / 1000,
                             failed: Math.round(results[i][3] * 1000) / 1000
                         })
-                    }
-                    cb(null, data);
+                    }*/
+                    cb(null, results);
                 })
                 .catch(cb);
         }
