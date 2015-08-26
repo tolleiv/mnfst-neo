@@ -34,6 +34,7 @@ block content
 
                     each file in influencialFiles
                         tr
-                            td= file.name
+                            td
+                                a(href='/ui/dashboards/file/' + file.id)= file.name
                             td= file.count
                             td= file.score

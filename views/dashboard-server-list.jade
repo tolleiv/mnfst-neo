@@ -29,6 +29,7 @@ block content
 
                     each server in servers
                         tr
-                            td= server.fqdn
+                            td
+                                a(href='/ui/dashboards/server/' + server.id)= server.fqdn
                             td= server.max_rate
                             td= server.max_failed

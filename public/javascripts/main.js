@@ -19,8 +19,8 @@ $(function () {
             var counts = {};
             var max = 0;
             for (var i = 0; i < data.length; i++) {
-                counts[data[i][2]] = counts[data[i][2]] + 1 || 1;
-                max = Math.max(data[i][2], max);
+                counts[data[i][3]] = counts[data[i][3]] + 1 || 1;
+                max = Math.max(data[i][3], max);
             }
             var bucket = 1;
             while (bucket * bucketNumber < max) bucket *= 2;
@@ -49,7 +49,7 @@ $(function () {
         d3.json("/files", function (data) {
             var chartData = [];
             for (var i = 0; i < data.length; i++) {
-                chartData.push({File: data[i][0], ServerCount: data[i][1], WeightScore: data[i][2]})
+                chartData.push({File: data[i][1], ServerCount: data[i][2], WeightScore: data[i][3]})
             }
 
             var fileScoreDotChart = new dimple.chart(fileScoreDotsSvg, chartData);

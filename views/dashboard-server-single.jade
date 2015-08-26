@@ -1,0 +1,35 @@
+extends layout
+
+block content
+
+    h3= 'Server "' + server.server.data.name + '"'
+
+
+    .container
+        .row
+            .col-md-6
+                h4 Related resources
+                table.table.table-striped
+                    tr
+                        th Resource name
+                        th Change rate
+                        th Failure rate
+                    each resource in server.resources
+                        tr
+
+                            td
+                                a(href='/ui/dashboards/resource/' + resource[0].metadata.id)= resource[0].data.name
+                            td= Math.round(resource[1].data.rate10 * 1000) / 1000
+                            td= Math.round(resource[1].data.failed10 * 1000) / 1000
+
+
+
+            .col-md-6
+                h4 Related files
+                table.table.table-striped
+                    tr
+                        th File name
+                    each file in server.files
+                        tr
+                            td
+                                a(href='/ui/dashboards/file/' + file.metadata.id)= file.data.name

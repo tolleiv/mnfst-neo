@@ -14,7 +14,11 @@ block content
                         th File name
                     each file in resource.files
                         tr
-                            td= file.data.name
+                            td
+                                a(href='/ui/dashboards/file/' + file.metadata.id)= file.data.name
+
+
+
 
             .col-md-6
                 h4 Related servers
@@ -26,6 +30,7 @@ block content
                         th Failure rate
                     each server in resource.servers
                         tr
-                            td= server[0].data.fqdn
+                            td
+                                a(href='/ui/dashboards/server/' + server[0].metadata.id)= server[0].data.fqdn
                             td= Math.round(server[1].data.rate10*1000)/1000
                             td= Math.round(server[1].data.failed10 * 1000) / 1000

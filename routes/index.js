@@ -19,14 +19,28 @@ router.get('/ui/dashboards/files', function (req, res, next) {
                 .then(function (results) {
                     var data = [];
                     for (var i = 0; i < results.length; i++) {
-                        data.push({name: results[i][0], count: results[i][1], score: results[i][2]})
+                        data.push({id: results[i][0], name: results[i][1], count: results[i][2], score: results[i][3]})
                     }
                     cb(null, data);
                 })
                 .catch(cb);
         }
     ], function (err, results) {
-        res.render('dashboard-file', {title: 'Mnfst - Files dashboard', influencialFiles: results[0]});
+        res.render('dashboard-file-list', {title: 'Mnfst - Files dashboard', influencialFiles: results[0]});
+    });
+});
+
+router.get('/ui/dashboards/file/:id', function (req, res, next) {
+    async.series([
+        function (cb) {
+            fileGraph.showFile({id: parseInt(req.params.id)})
+                .then(function (results) {
+                    cb(null, results);
+                })
+                .catch(cb);
+        }
+    ], function (err, results) {
+        res.render('dashboard-file-single', {title: 'Mnfst - File dashboard', file: results[0]});
     });
 });
 
@@ -54,7 +68,6 @@ router.get('/ui/dashboards/resource/:id', function (req, res, next) {
                 .catch(cb);
         }
     ], function (err, results) {
-        console.log(results[0])
         res.render('dashboard-resource-single', {title: 'Mnfst - Resource dashboard', resource: results[0]});
     });
 });
@@ -69,7 +82,21 @@ router.get('/ui/dashboards/servers', function (req, res, next) {
                 .catch(cb);
         }
     ], function (err, results) {
-        res.render('dashboard-server', {title: 'Mnfst - Servers dashboard', servers: results[0]});
+        res.render('dashboard-server-list', {title: 'Mnfst - Servers dashboard', servers: results[0]});
+    });
+});
+
+router.get('/ui/dashboards/server/:id', function (req, res, next) {
+    async.series([
+        function (cb) {
+            serverGraph.showServer({id: parseInt(req.params.id)})
+                .then(function (results) {
+                    cb(null, results);
+                })
+                .catch(cb);
+        }
+    ], function (err, results) {
+        res.render('dashboard-server-single', {title: 'Mnfst - Servers dashboard', server: results[0]});
     });
 });
 
