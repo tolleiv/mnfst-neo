@@ -6,3 +6,7 @@ body {
 body > .container {
     padding-bottom: 50px;
 }
+
+.table-striped a {
+    color: #337ab7
+}
